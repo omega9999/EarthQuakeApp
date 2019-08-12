@@ -95,7 +95,7 @@ class GeoJSON implements Serializable, Parcelable {
         return this;
     }
 
-    public List<Feature> getFeatures() {
+    List<Feature> getFeatures() {
         return features;
     }
 

@@ -92,9 +92,6 @@ public class Properties implements Serializable, Parcelable
     public final static Parcelable.Creator<Properties> CREATOR = new Creator<Properties>() {
 
 
-        @SuppressWarnings({
-            "unchecked"
-        })
         public Properties createFromParcel(Parcel in) {
             return new Properties(in);
         }
@@ -107,7 +104,7 @@ public class Properties implements Serializable, Parcelable
     ;
     private final static long serialVersionUID = -6366758129567766969L;
 
-    protected Properties(Parcel in) {
+    private Properties(Parcel in) {
         this.mag = ((double) in.readValue((double.class.getClassLoader())));
         this.place = ((String) in.readValue((String.class.getClassLoader())));
         this.time = ((long) in.readValue((long.class.getClassLoader())));

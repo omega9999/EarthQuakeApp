@@ -12,6 +12,7 @@ Casi risolti:
 2) shape drawables
     vedi https://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
     e    https://guides.codepath.com/android/Drawables
+3) common intent https://developer.android.com/guide/components/intents-common.html
 
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.example.android.earthquakeapp.Earthquake;
 import com.example.android.earthquakeapp.R;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -49,6 +48,7 @@ public class Utils {
             }
             earthquake.setPrimaryLocation(location);
             earthquake.setLocationOffset(locationOffset);
+            earthquake.setUrl(properties.getUrl());
 
             earthquake.setDate(new Date(properties.getTime()));
             earthquakes.add(earthquake);

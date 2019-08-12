@@ -26,9 +26,6 @@ public class Feature implements Serializable, Parcelable
     public final static Parcelable.Creator<Feature> CREATOR = new Creator<Feature>() {
 
 
-        @SuppressWarnings({
-            "unchecked"
-        })
         public Feature createFromParcel(Parcel in) {
             return new Feature(in);
         }
@@ -41,7 +38,7 @@ public class Feature implements Serializable, Parcelable
     ;
     private final static long serialVersionUID = 1829954726642510490L;
 
-    protected Feature(Parcel in) {
+    private Feature(Parcel in) {
         this.type = ((String) in.readValue((String.class.getClassLoader())));
         this.properties = ((Properties) in.readValue((Properties.class.getClassLoader())));
         this.geometry = ((Geometry) in.readValue((Geometry.class.getClassLoader())));
@@ -78,7 +75,7 @@ public class Feature implements Serializable, Parcelable
         this.type = type;
     }
 
-    public Properties getProperties() {
+    Properties getProperties() {
         return properties;
     }
 

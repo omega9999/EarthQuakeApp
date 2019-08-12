@@ -42,10 +42,18 @@ public class Earthquake {
         return this;
     }
 
+    public String getUrl() {
+        return mUrl;
+    }
 
+    public Earthquake setUrl(String url) {
+        this.mUrl = url;
+        return this;
+    }
 
     private double mMagnitude;
     private String mPrimaryLocation;
     private String mLocationOffset;
     private Date mDate;
+    private String mUrl;
 }
