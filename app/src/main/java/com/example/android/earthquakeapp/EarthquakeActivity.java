@@ -78,6 +78,8 @@ public class EarthquakeActivity extends AppCompatActivity {
                 final TextView location = root.findViewById(R.id.primary_location);
                 final TextView locationOffset = root.findViewById(R.id.location_offset);
                 final TextView date = root.findViewById(R.id.date);
+                final TextView time = root.findViewById(R.id.time);
+
 
                 GradientDrawable magnitudeCircle = (GradientDrawable) magnitude.getBackground();
                 int magnitudeColor = getMagnitudeColor(earthquake.getMagnitude());
@@ -87,6 +89,7 @@ public class EarthquakeActivity extends AppCompatActivity {
                 location.setText(earthquake.getPrimaryLocation());
                 locationOffset.setText(earthquake.getLocationOffset());
                 date.setText(dateFormat.format(earthquake.getDate()));
+                time.setText(timeFormat.format(earthquake.getDate()));
             }
             return root;
         }
@@ -136,7 +139,8 @@ public class EarthquakeActivity extends AppCompatActivity {
         }
 
         //TODO see https://developer.android.com/reference/java/text/SimpleDateFormat.html
-        private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     }
 
 
