@@ -30,7 +30,7 @@ public class JsonUtils {
                 String locationOffset = context.getString(R.string.near_the);
                 String location = places[0];
                 if (places.length > 1) {
-                    locationOffset = places[0] + context.getString(R.string.separator);
+                    locationOffset = places[0] + " " + context.getString(R.string.separator);
                     location = places[1];
                 }
                 earthquake.setPrimaryLocation(location);
