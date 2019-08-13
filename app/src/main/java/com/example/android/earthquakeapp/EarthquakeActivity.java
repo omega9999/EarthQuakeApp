@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.android.earthquakeapp.geojson.Utils;
+import com.example.android.earthquakeapp.geojson.JsonUtils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +39,7 @@ public class EarthquakeActivity extends AppCompatActivity {
         setContentView(R.layout.earthquake_activity);
 
         // Create a fake list of earthquake locations.
-        final ArrayList<Earthquake> earthquakes = Utils.convertFromJSONExample(this);
+        final ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
         // Find a reference to the {@link ListView} in the layout
         final ListView earthquakeListView = findViewById(R.id.list);
