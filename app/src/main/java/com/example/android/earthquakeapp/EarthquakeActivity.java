@@ -1,27 +1,20 @@
 package com.example.android.earthquakeapp;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
+import com.example.android.earthquakeapp.connection.HttpConnection;
 import com.example.android.earthquakeapp.geojson.JsonUtils;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /*
 TODO Programmable Web API Directory: http://www.programmableweb.com/apis/directory
@@ -38,31 +31,57 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        // Create a fake list of earthquake locations.
-        final ArrayList<Earthquake> earthquakes = new ArrayList<>();
-
         // Find a reference to the {@link ListView} in the layout
-        final ListView earthquakeListView = findViewById(R.id.list);
+        earthquakeListView = findViewById(R.id.list);
 
+        final EarthquakeAsyncTask task = new EarthquakeAsyncTask(this);
+        task.execute("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=2018-12-31&minmag=5&limit=100");
         // Create a new {@link ArrayAdapter} of earthquakes
-        final EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
 
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(adapter);
+    }
 
-        earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
-            Earthquake earthquake = earthquakes.get(position);
-            if (earthquake.getUrl() != null){
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>>{
+
+        public EarthquakeAsyncTask(@NonNull final Activity activity) {
+            this.mActivity = activity;
+        }
+
+        @Override
+        protected ArrayList<Earthquake> doInBackground(String... urls) {
+            try {
+                HttpConnection connection = new HttpConnection(urls[0]);
+                return JsonUtils.convertFromJSON(this.mActivity,connection.makeHttpGetRequest());
+            } catch (Exception e) {
+                Log.e(TAG,"Problem",e);
             }
-        });
+            return new ArrayList<>();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Earthquake> earthquakes) {
+            final EarthquakeAdapter adapter = new EarthquakeAdapter(mActivity, earthquakes);
+
+            // Set the adapter on the {@link ListView}
+            // so the list can be populated in the user interface
+            earthquakeListView.setAdapter(adapter);
+
+            earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
+                Earthquake earthquake = earthquakes.get(position);
+                if (earthquake.getUrl() != null){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        private final Activity mActivity;
     }
 
 
+
+    private ListView earthquakeListView;
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
 
