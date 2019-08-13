@@ -13,6 +13,9 @@ Casi risolti:
     vedi https://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
     e    https://guides.codepath.com/android/Drawables
 3) common intent https://developer.android.com/guide/components/intents-common.html
+4) permessi sul manifest: 
+    https://developer.android.com/guide/topics/permissions/overview
+    https://developer.android.com/reference/android/Manifest.permission.html
 
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
