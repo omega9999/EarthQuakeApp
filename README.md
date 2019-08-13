@@ -5,10 +5,11 @@ https://classroom.udacity.com/courses/ud843
 Rif GIT:
 https://github.com/udacity/ud843_Soonami
 https://github.com/udacity/ud843_DidYouFeelIt
+https://github.com/googlesamples/android-NetworkConnect
 https://github.com/udacity/ud843-QuakeReport
 
 Casi risolti:
-1) Gson
+1) Gson generato con (vedere http://www.jsonschema2pojo.org/): attenzione che i numeri non li gestisce bene (int/long/double)
 2) shape drawables
     vedi https://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
     e    https://guides.codepath.com/android/Drawables
@@ -19,6 +20,8 @@ Casi risolti:
 5) multithread:
     https://developer.android.com/guide/components/processes-and-threads.html
     https://developer.android.com/training/articles/perf-anr.html
+6) Android Performance Patterns (multithread):
+    https://www.youtube.com/watch?v=qk5F6Bxqhr4&index=1&list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE
 
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
@@ -28,6 +31,7 @@ TODO:
 5) provare la classe OkHttpClient https://github.com/square/okhttp
 6) provare la classe Retrofit https://square.github.io/retrofit/
 
+Altri link utili:
 http://www.json.org/
 https://www.programmableweb.com/apis/directory
 https://developers.google.com/apis-explorer/#p/
@@ -36,6 +40,7 @@ https://www.restapitutorial.com/lessons/httpmethods.html
 https://developer.android.com/reference/java/net/HttpURLConnection.html
 https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 https://developer.android.com/training/basics/network-ops/connecting.html
-
+https://material.io/design/components/progress-indicators.html
+https://developer.android.com/reference/android/os/AsyncTask.html
 
 
