@@ -38,19 +38,34 @@ public class Utils {
         for (Feature feature : geoJSON.getFeatures()) {
             Earthquake earthquake = new Earthquake();
             Properties properties = feature.getProperties();
-            earthquake.setMagnitude(properties.getMag());
-            String[] places = properties.getPlace().split(LOCATION_SEPARATOR);
-            String locationOffset = context.getString(R.string.near_the);
-            String location = places[0];
-            if (places.length > 1){
-                locationOffset = places[0] + LOCATION_SEPARATOR;
-                location = places[1];
-            }
-            earthquake.setPrimaryLocation(location);
-            earthquake.setLocationOffset(locationOffset);
-            earthquake.setUrl(properties.getUrl());
 
-            earthquake.setDate(new Date(properties.getTime()));
+            if (properties != null) {
+                earthquake.setMagnitude(properties.getMag());
+                String[] places = properties.getPlace().split(LOCATION_SEPARATOR);
+                String locationOffset = context.getString(R.string.near_the);
+                String location = places[0];
+                if (places.length > 1) {
+                    locationOffset = places[0] + context.getString(R.string.separator);
+                    location = places[1];
+                }
+                earthquake.setPrimaryLocation(location);
+                earthquake.setLocationOffset(locationOffset);
+                earthquake.setUrl(properties.getUrl());
+                earthquake.setId(feature.getId());
+                earthquake.setDate(new Date(properties.getTime()));
+            }
+            Geometry geometry = feature.getGeometry();
+            if (geometry != null){
+                if ("Point".equals(geometry.getType())){
+                    if (geometry.getCoordinates() != null && geometry.getCoordinates().size() >= 3){
+                        earthquake.setLongitude(geometry.getCoordinates().get(0));
+                        earthquake.setLatitude(geometry.getCoordinates().get(1));
+                        earthquake.setDept(geometry.getCoordinates().get(2));
+                    }
+                }
+            }
+
+
             earthquakes.add(earthquake);
         }
         return earthquakes;
