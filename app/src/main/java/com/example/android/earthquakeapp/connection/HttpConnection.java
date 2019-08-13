@@ -30,7 +30,7 @@ public class HttpConnection {
      * @throws HttpException throw if there are problem
      */
     public String makeHttpGetRequest() throws HttpException {
-        String jsonResponse = null;
+        String jsonResponse;
 
         HttpURLConnection urlConnection = null;
         try {
