@@ -35,12 +35,12 @@ public class EarthquakeActivity extends AppCompatActivity {
         earthquakeListView = findViewById(R.id.list);
 
         final EarthquakeAsyncTask task = new EarthquakeAsyncTask(this);
-        task.execute("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10");
+        task.execute(USGS_REQUEST_URL);
         // Create a new {@link ArrayAdapter} of earthquakes
 
     }
 
-    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>>{
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
 
         EarthquakeAsyncTask(@NonNull final Activity activity) {
             this.mActivity = activity;
@@ -53,9 +53,9 @@ public class EarthquakeActivity extends AppCompatActivity {
                     return new ArrayList<>();
                 }
                 final HttpConnection connection = new HttpConnection(urls[0]);
-                return JsonUtils.convertFromJSON(this.mActivity,connection.makeHttpGetRequest());
+                return JsonUtils.convertFromJSON(this.mActivity, connection.makeHttpGetRequest());
             } catch (Exception e) {
-                Log.e(TAG,"Problem",e);
+                Log.e(TAG, "Problem", e);
             }
             return new ArrayList<>();
         }
@@ -70,7 +70,7 @@ public class EarthquakeActivity extends AppCompatActivity {
 
             earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
                 Earthquake earthquake = earthquakes.get(position);
-                if (earthquake.getUrl() != null){
+                if (earthquake.getUrl() != null) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
@@ -83,11 +83,11 @@ public class EarthquakeActivity extends AppCompatActivity {
     }
 
 
-
     private ListView earthquakeListView;
 
-    private static final String TAG = EarthquakeActivity.class.getSimpleName();
+    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
+    private static final String TAG = EarthquakeActivity.class.getSimpleName();
 
 
 }
