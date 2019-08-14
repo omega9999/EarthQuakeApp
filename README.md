@@ -39,6 +39,9 @@ Casi risolti:
     https://developer.android.com/reference/android/widget/AdapterView.html#setEmptyView(android.view.View)
     https://material.google.com/patterns/empty-states.html
     https://material.io/design/communication/empty-states.html
+10) Check connessione a internet:
+    https://developer.android.com/training/basics/network-ops/connecting.html
+    https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
     
 
 TODO:

@@ -3,5 +3,6 @@
     <string name="near_the">Near the</string>
     <string name="separator">of</string>
     <string name="no_earthquakes">No earthquakes found.</string>
-    <string name="loading_data">Loading data...</string>
+    <string name="loading_data">Loading data…</string>
+    <string name="no_internet">No internet connection.</string>
 </resources>

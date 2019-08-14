@@ -1,8 +1,11 @@
 package com.example.android.earthquakeapp;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,27 +54,36 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-        final Bundle bundle = new Bundle();
-        bundle.putString(URL, USGS_REQUEST_URL);
+        if (!isConnected(this)){
+            this.mEmptyList.setText(getString(R.string.no_internet));
+            this.mEmptyList.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mEmptyList.setText(null);
+            this.mEmptyList.setVisibility(View.GONE);
 
-        // TODO deprecated
-        Log.d(TAG,"LOADER initLoader()");
-        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, bundle, this);
+            final Bundle bundle = new Bundle();
+            bundle.putString(URL, USGS_REQUEST_URL);
+
+            // TODO deprecated
+            Log.d(TAG, "LOADER initLoader()");
+            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, bundle, this);
+        }
     }
 
     @Override
     public Loader<List<Earthquake>> onCreateLoader(final int i, @NonNull final Bundle bundle) {
-        Log.d(TAG,"LOADER onCreateLoader()");
+        Log.d(TAG, "LOADER onCreateLoader()");
         return new EarthquakeLoader(this, bundle.getString(URL), this);
     }
 
     @Override
     public void onLoadFinished(@NonNull final Loader<List<Earthquake>> loader, @NonNull final List<Earthquake> earthquakes) {
-        Log.d(TAG,"LOADER onLoadFinished()");
+        Log.d(TAG, "LOADER onLoadFinished()");
         mAdapter.clear();
         this.mEmptyList.setText(null);
         this.mProgressBar.setVisibility(View.GONE);
-        if (earthquakes.size() == 0){
+        if (earthquakes.size() == 0) {
             this.mEmptyList.setText(getString(R.string.no_earthquakes));
         }
         mAdapter.addAll(earthquakes);
@@ -79,14 +91,21 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void onLoaderReset(@NonNull final Loader<List<Earthquake>> loader) {
-        Log.d(TAG,"LOADER onLoaderReset()");
+        Log.d(TAG, "LOADER onLoaderReset()");
         mAdapter.clear();
     }
 
     @Override
     public void startLoading() {
         this.mEmptyList.setText(getString(R.string.loading_data));
+        this.mEmptyList.setVisibility(View.VISIBLE);
         this.mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    public static boolean isConnected(@NonNull final Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final  NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private EarthquakeAdapter mAdapter;
