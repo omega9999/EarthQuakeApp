@@ -1,5 +1,7 @@
 package com.example.android.earthquakeapp.connection;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -30,6 +32,7 @@ public class HttpConnection {
      * @throws HttpException throw if there are problem
      */
     public String makeHttpGetRequest() throws HttpException {
+        Log.d(TAG,"start of method makeHttpGetRequest");
         String jsonResponse;
 
         HttpURLConnection urlConnection = null;
@@ -54,6 +57,7 @@ public class HttpConnection {
                 urlConnection.disconnect();
             }
         }
+        Log.d(TAG,"end of method makeHttpGetRequest");
         return jsonResponse;
     }
 

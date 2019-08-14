@@ -35,21 +35,24 @@ public class EarthquakeActivity extends AppCompatActivity {
         earthquakeListView = findViewById(R.id.list);
 
         final EarthquakeAsyncTask task = new EarthquakeAsyncTask(this);
-        task.execute("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=2018-12-31&minmag=5&limit=100");
+        task.execute("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10");
         // Create a new {@link ArrayAdapter} of earthquakes
 
     }
 
     private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>>{
 
-        public EarthquakeAsyncTask(@NonNull final Activity activity) {
+        EarthquakeAsyncTask(@NonNull final Activity activity) {
             this.mActivity = activity;
         }
 
         @Override
         protected ArrayList<Earthquake> doInBackground(String... urls) {
             try {
-                HttpConnection connection = new HttpConnection(urls[0]);
+                if (urls.length < 1 || urls[0] == null) {
+                    return new ArrayList<>();
+                }
+                final HttpConnection connection = new HttpConnection(urls[0]);
                 return JsonUtils.convertFromJSON(this.mActivity,connection.makeHttpGetRequest());
             } catch (Exception e) {
                 Log.e(TAG,"Problem",e);

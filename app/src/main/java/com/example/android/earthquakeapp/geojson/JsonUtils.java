@@ -1,6 +1,7 @@
 package com.example.android.earthquakeapp.geojson;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +19,9 @@ public class JsonUtils {
      * @return {@code ArrayList<Earthquake>} from JSON string
      */
     public static ArrayList<Earthquake> convertFromJSON(@NonNull final Context context, @NonNull final String json) {
+        Log.d(TAG,"start of convertFromJSON method");
         final GeoJSON geoJSON = GeoJSON.createFromJSON(json);
+        Log.d(TAG,"object GeoJSON created");
         final ArrayList<Earthquake> earthquakes = new ArrayList<>();
         for (Feature feature : geoJSON.getFeatures()) {
             Earthquake earthquake = new Earthquake();
@@ -51,8 +54,11 @@ public class JsonUtils {
             }
             earthquakes.add(earthquake);
         }
+        Log.d(TAG,"end of convertFromJSON method");
         return earthquakes;
     }
 
     private static final String LOCATION_SEPARATOR = " of ";
+
+    private static final String TAG = JsonUtils.class.getSimpleName();
 }
