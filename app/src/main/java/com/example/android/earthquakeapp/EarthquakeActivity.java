@@ -33,7 +33,18 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         // Find a reference to the {@link ListView} in the layout
         earthquakeListView = findViewById(R.id.list);
+        this.mAdapter = new EarthquakeAdapter(this, new ArrayList<>());
+        earthquakeListView.setAdapter(mAdapter);
 
+        earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
+            final Earthquake earthquake = mAdapter.getItem(position);
+            if (earthquake.getUrl() != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
         final EarthquakeAsyncTask task = new EarthquakeAsyncTask(this);
         task.execute(USGS_REQUEST_URL);
         // Create a new {@link ArrayAdapter} of earthquakes
@@ -62,21 +73,8 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Earthquake> earthquakes) {
-            final EarthquakeAdapter adapter = new EarthquakeAdapter(mActivity, earthquakes);
-
-            // Set the adapter on the {@link ListView}
-            // so the list can be populated in the user interface
-            earthquakeListView.setAdapter(adapter);
-
-            earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
-                Earthquake earthquake = earthquakes.get(position);
-                if (earthquake.getUrl() != null) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
-                    }
-                }
-            });
+            mAdapter.clear();
+            mAdapter.addAll(earthquakes);
         }
 
         private final Activity mActivity;
@@ -84,6 +82,7 @@ public class EarthquakeActivity extends AppCompatActivity {
 
 
     private ListView earthquakeListView;
+    private EarthquakeAdapter mAdapter;
 
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
