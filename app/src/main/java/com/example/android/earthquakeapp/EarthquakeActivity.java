@@ -6,7 +6,9 @@ import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +25,7 @@ TODO Tips for building a great UI https://developer.android.com/guide/topics/ui
 TODO USGS Earthquake real time feeds and notifications: http://earthquake.usgs.gov/earthquakes/feed/v1.0/index.php
 TODO USGS Real-Time Earthquake Data in Spreadsheet Format: http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php
 */
-public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>>, EarthquakeLoader.StartLoading {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // Find a reference to the {@link ListView} in the layout
         final ListView earthquakeListView = findViewById(R.id.list);
         this.mEmptyList = findViewById(R.id.empty_view);
+        this.mProgressBar = findViewById(R.id.loading_indicator);
+
         this.mAdapter = new EarthquakeAdapter(this, new ArrayList<>());
         earthquakeListView.setAdapter(mAdapter);
         earthquakeListView.setEmptyView(this.mEmptyList);
@@ -58,7 +62,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public Loader<List<Earthquake>> onCreateLoader(final int i, @NonNull final Bundle bundle) {
         Log.d(TAG,"LOADER onCreateLoader()");
-        return new EarthquakeLoader(this, bundle.getString(URL), this.mEmptyList);
+        return new EarthquakeLoader(this, bundle.getString(URL), this);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         Log.d(TAG,"LOADER onLoadFinished()");
         mAdapter.clear();
         this.mEmptyList.setText(null);
+        this.mProgressBar.setVisibility(View.GONE);
         if (earthquakes.size() == 0){
             this.mEmptyList.setText(getString(R.string.no_earthquakes));
         }
@@ -78,9 +83,15 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         mAdapter.clear();
     }
 
+    @Override
+    public void startLoading() {
+        this.mEmptyList.setText(getString(R.string.loading_data));
+        this.mProgressBar.setVisibility(View.VISIBLE);
+    }
 
     private EarthquakeAdapter mAdapter;
     private TextView mEmptyList;
+    private ProgressBar mProgressBar;
 
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
