@@ -35,6 +35,11 @@ Casi risolti:
      Room database https://developer.android.com/topic/libraries/architecture/room.html
      LiveData guide: https://developer.android.com/topic/libraries/architecture/livedata.html
      ViewModel guide: https://developer.android.com/topic/libraries/architecture/viewmodel.html
+9) Liste vuote: 
+    https://developer.android.com/reference/android/widget/AdapterView.html#setEmptyView(android.view.View)
+    https://material.google.com/patterns/empty-states.html
+    https://material.io/design/communication/empty-states.html
+    
 
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
