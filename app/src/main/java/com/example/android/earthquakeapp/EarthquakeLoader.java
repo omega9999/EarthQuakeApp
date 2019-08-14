@@ -4,8 +4,10 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.android.earthquakeapp.connection.HttpConnection;
 import com.example.android.earthquakeapp.geojson.JsonUtils;
@@ -22,14 +24,16 @@ import java.util.List;
  */
 public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
-    EarthquakeLoader(@NonNull final Context context, @NonNull final String url) {
+    EarthquakeLoader(@NonNull final Context context, @Nullable final String url, TextView loadingView) {
         super(context);
         this.mUrl = url;
+        this.mLoading = loadingView;
     }
 
     @Override
     protected void onStartLoading() {
         Log.d(TAG,"LOADER onStartLoading()");
+        this.mLoading.setText(getContext().getString(R.string.loading_data));
         // is a required step to actually trigger the loadInBackground() method to execute
         forceLoad();
     }
@@ -39,7 +43,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
     public List<Earthquake> loadInBackground() {
         Log.d(TAG,"LOADER loadInBackground()");
         try {
-            if (TextUtils.isEmpty(mUrl)) {
+            if (TextUtils.isEmpty(this.mUrl)) {
                 return new ArrayList<>();
             }
             final HttpConnection connection = new HttpConnection(this.mUrl);
@@ -50,7 +54,8 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
         return new ArrayList<>();
     }
 
-    private String mUrl;
+    private final String mUrl;
+    private final TextView mLoading;
 
     private static final String TAG = EarthquakeLoader.class.getSimpleName();
 }

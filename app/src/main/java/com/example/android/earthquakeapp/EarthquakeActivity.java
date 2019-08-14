@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,9 +31,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.earthquake_activity);
 
         // Find a reference to the {@link ListView} in the layout
-        ListView earthquakeListView = findViewById(R.id.list);
+        final ListView earthquakeListView = findViewById(R.id.list);
+        this.mEmptyList = findViewById(R.id.empty_view);
         this.mAdapter = new EarthquakeAdapter(this, new ArrayList<>());
         earthquakeListView.setAdapter(mAdapter);
+        earthquakeListView.setEmptyView(this.mEmptyList);
 
         earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
             final Earthquake earthquake = mAdapter.getItem(position);
@@ -55,13 +58,17 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public Loader<List<Earthquake>> onCreateLoader(final int i, @NonNull final Bundle bundle) {
         Log.d(TAG,"LOADER onCreateLoader()");
-        return new EarthquakeLoader(this, bundle.getString(URL));
+        return new EarthquakeLoader(this, bundle.getString(URL), this.mEmptyList);
     }
 
     @Override
     public void onLoadFinished(@NonNull final Loader<List<Earthquake>> loader, @NonNull final List<Earthquake> earthquakes) {
         Log.d(TAG,"LOADER onLoadFinished()");
         mAdapter.clear();
+        this.mEmptyList.setText(null);
+        if (earthquakes.size() == 0){
+            this.mEmptyList.setText(getString(R.string.no_earthquakes));
+        }
         mAdapter.addAll(earthquakes);
     }
 
@@ -73,6 +80,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
 
     private EarthquakeAdapter mAdapter;
+    private TextView mEmptyList;
 
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
