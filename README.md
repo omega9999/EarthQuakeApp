@@ -24,6 +24,17 @@ Casi risolti:
     https://www.youtube.com/watch?v=qk5F6Bxqhr4&index=1&list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE
     https://www.youtube.com/watch?v=s4eAtMHU5gI&index=8&list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE
     https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE
+7) uso di AsyncTask
+8) uso di Loader (inizialmente quelli deprecati -> quelli androidx): attenzione che non sono accessibili nei Service https://developer.android.com/reference/android/app/Service
+    (deprecato) https://developer.android.com/guide/components/loaders.html
+    (deprecato) https://developer.android.com/reference/android/app/LoaderManager.html
+    (deprecato) https://developer.android.com/reference/android/app/LoaderManager.LoaderCallbacks.html
+    (deprecato) esempio: https://www.concretepage.com/android/android-asynctaskloader-example-with-listview-and-baseadapter
+     ViewModels + LiveData: https://developer.android.com/reference/androidx/lifecycle/ViewModel +  https://developer.android.com/reference/androidx/lifecycle/LiveData
+     MediatorLiveData https://developer.android.com/reference/androidx/lifecycle/MediatorLiveData
+     Room database https://developer.android.com/topic/libraries/architecture/room.html
+     LiveData guide: https://developer.android.com/topic/libraries/architecture/livedata.html
+     ViewModel guide: https://developer.android.com/topic/libraries/architecture/viewmodel.html
 
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
