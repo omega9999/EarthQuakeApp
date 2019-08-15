@@ -51,6 +51,7 @@ Casi risolti:
     https://developer.android.com/guide/topics/ui/settings.html
     https://developer.android.com/guide/practices/screens_support
     https://developer.android.com/training/basics/fragments/fragment-ui.html
+12)  Uri.Builder class: https://developer.android.com/reference/android/net/Uri.Builder.html
     
     
 
