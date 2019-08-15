@@ -47,6 +47,7 @@ Casi risolti:
     https://developer.android.com/guide/topics/data/data-storage.html#pref
     (deprecato) https://developer.android.com/reference/android/preference/PreferenceFragment.html
     (deprecato) https://developer.android.com/reference/android/preference/Preference.html
+    (deprecato) https://developer.android.com/reference/android/preference/ListPreference.html
     https://developer.android.com/reference/androidx/preference/package-summary.html
     https://developer.android.com/guide/topics/ui/settings.html
     https://developer.android.com/guide/practices/screens_support
@@ -62,6 +63,7 @@ TODO:
 4) shrink code: https://developer.android.com/studio/build/shrink-code
 5) provare la classe OkHttpClient https://github.com/square/okhttp
 6) provare la classe Retrofit https://square.github.io/retrofit/
+7) usare altro al posto dei deprecati PreferenceFragment, Preference, ListPreference
 
 Altri link utili:
 http://www.json.org/
