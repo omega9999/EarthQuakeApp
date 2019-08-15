@@ -78,5 +78,10 @@ https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 https://developer.android.com/training/basics/network-ops/connecting.html
 https://material.io/design/components/progress-indicators.html
 https://developer.android.com/reference/android/os/AsyncTask.html
+api for "The Guardian" https://open-platform.theguardian.com/documentation/
+http://content.guardianapis.com/search?q=debates&api-key=test
+http://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test
 
-
+Progetti come esercizio:
+- Book Listing: https://review.udacity.com/#!/rubrics/164/view (https://www.googleapis.com/books/v1/volumes?q=android&maxResults=1)
+- News App: https://review.udacity.com/#!/rubrics/165/view (http://content.guardianapis.com/search?q=debates&api-key=test)
