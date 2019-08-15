@@ -42,7 +42,7 @@ Casi risolti:
 10) Check connessione a internet:
     https://developer.android.com/training/basics/network-ops/connecting.html
     https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
-11) utilizzo di SharedPreferences: 
+11) utilizzo di SharedPreferences e option menu': 
     https://developer.android.com/reference/android/content/SharedPreferences.html
     https://developer.android.com/guide/topics/data/data-storage.html#pref
     (deprecato) https://developer.android.com/reference/android/preference/PreferenceFragment.html

@@ -5,4 +5,6 @@
     <string name="no_earthquakes">No earthquakes found.</string>
     <string name="loading_data">Loading data…</string>
     <string name="no_internet">No internet connection.</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Earthquake Settings</string>
 </resources>
