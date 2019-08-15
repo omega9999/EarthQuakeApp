@@ -42,6 +42,16 @@ Casi risolti:
 10) Check connessione a internet:
     https://developer.android.com/training/basics/network-ops/connecting.html
     https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
+11) utilizzo di SharedPreferences: 
+    https://developer.android.com/reference/android/content/SharedPreferences.html
+    https://developer.android.com/guide/topics/data/data-storage.html#pref
+    (deprecato) https://developer.android.com/reference/android/preference/PreferenceFragment.html
+    (deprecato) https://developer.android.com/reference/android/preference/Preference.html
+    https://developer.android.com/reference/androidx/preference/package-summary.html
+    https://developer.android.com/guide/topics/ui/settings.html
+    https://developer.android.com/guide/practices/screens_support
+    https://developer.android.com/training/basics/fragments/fragment-ui.html
+    
     
 
 TODO:
@@ -56,6 +66,8 @@ Altri link utili:
 http://www.json.org/
 https://www.programmableweb.com/apis/directory
 https://developers.google.com/apis-explorer/#p/
+https://www.googleapis.com/books/v1/volumes?q=android&maxResults=1
+https://developers.google.com/books/docs/v1/getting_started#intro
 https://www.data.gov/
 https://www.restapitutorial.com/lessons/httpmethods.html
 https://developer.android.com/reference/java/net/HttpURLConnection.html
