@@ -4,10 +4,12 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +18,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -56,16 +60,15 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-        if (!isConnected(this)){
+        if (!isConnected(this)) {
             this.mEmptyList.setText(getString(R.string.no_internet));
             this.mEmptyList.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             this.mEmptyList.setText(null);
             this.mEmptyList.setVisibility(View.GONE);
 
             final Bundle bundle = new Bundle();
-            bundle.putString(URL, USGS_REQUEST_URL);
+            bundle.putString(BASE_URL, BASE_USGS_REQUEST_URL);
 
             // TODO deprecated
             Log.d(TAG, "LOADER initLoader()");
@@ -75,6 +78,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     /**
      * method for create option menu for settings
+     *
      * @param menu
      * @return
      */
@@ -86,6 +90,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     /**
      * method to listen click on option menu
+     *
      * @param item
      * @return
      */
@@ -103,7 +108,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public Loader<List<Earthquake>> onCreateLoader(final int i, @NonNull final Bundle bundle) {
         Log.d(TAG, "LOADER onCreateLoader()");
-        return new EarthquakeLoader(this, bundle.getString(URL), this);
+        return new EarthquakeLoader(this, getQueryUrl(bundle.getString(BASE_URL)), this);
     }
 
     @Override
@@ -133,17 +138,33 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     public static boolean isConnected(@NonNull final Context context) {
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        final  NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    @Nullable
+    @CheckResult
+    private String getQueryUrl(@Nullable final String baseUriString) {
+        if (baseUriString == null) return null;
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final String minMagnitude = sharedPrefs.getString(getString(R.string.settings_min_magnitude_key), getString(R.string.settings_min_magnitude_default));
+        final Uri baseUri = Uri.parse(baseUriString);
+        final Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("format", "geojson");
+        uriBuilder.appendQueryParameter("limit", "10");
+        uriBuilder.appendQueryParameter("minmag", minMagnitude);
+        uriBuilder.appendQueryParameter("orderby", "time");
+        return uriBuilder.toString();
     }
 
     private EarthquakeAdapter mAdapter;
     private TextView mEmptyList;
     private ProgressBar mProgressBar;
 
-    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+    private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
 
-    private static final String URL = "URL";
+    private static final String BASE_URL = "BASE_URL";
     private static final int EARTHQUAKE_LOADER_ID = 1;
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
