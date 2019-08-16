@@ -67,6 +67,9 @@ OK 3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonsch
 8) per i dettagli inserire scelta tra apertura pagina esterna o activity interna (webview)
 9) per le coordinate inserire scelta tra apertura maps esterno o activity interna
 10) migliorare l'url di richiesta informazioni
+11) vedere se puo' essere utile: 
+	https://developers.google.com/maps/documentation/javascript/examples/layer-data-quakes
+	https://www.programmableweb.com/category/earthquakes/api
 
 Altri link utili:
 http://www.json.org/
