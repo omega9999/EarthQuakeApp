@@ -5,4 +5,12 @@
     <string name="settings_order_by_default" translatable="false">@string/settings_order_by_magnitude_value</string>
     <string name="settings_order_by_magnitude_value" translatable="false">magnitude</string>
     <string name="settings_order_by_most_recent_value" translatable="false">time</string>
+    <string name="settings_limit_row_key" translatable="false">limit_row</string>
+    <string name="settings_limit_row_default" translatable="false">@string/settings_limit_row_10_value</string>
+
+    <string name="settings_limit_row_10_value" translatable="false">10</string>
+    <string name="settings_limit_row_50_value" translatable="false">50</string>
+    <string name="settings_limit_row_100_value" translatable="false">100</string>
+    <string name="settings_limit_row_500_value" translatable="false">500</string>
+    <string name="settings_limit_row_1000_value" translatable="false">1000</string>
 </resources>

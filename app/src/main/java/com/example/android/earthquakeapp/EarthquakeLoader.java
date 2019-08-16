@@ -25,15 +25,16 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
     EarthquakeLoader(@NonNull final Context context, @Nullable final String url, @Nullable final StartLoading startLoadingCallBack) {
         super(context);
+        Log.i(TAG, String.format("URL GET: %1$s", url));
         this.mUrl = url;
         this.mStartLoadingCallBack = startLoadingCallBack;
     }
 
     @Override
     protected void onStartLoading() {
-        Log.d(TAG,"LOADER onStartLoading()");
+        Log.d(TAG, "LOADER onStartLoading()");
 
-        if (this.mStartLoadingCallBack != null){
+        if (this.mStartLoadingCallBack != null) {
             this.mStartLoadingCallBack.startLoading();
         }
 
@@ -44,7 +45,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
     @Override
     public List<Earthquake> loadInBackground() {
-        Log.d(TAG,"LOADER loadInBackground()");
+        Log.d(TAG, "LOADER loadInBackground()");
 
         try {
             if (TextUtils.isEmpty(this.mUrl)) {
@@ -58,7 +59,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
         return new ArrayList<>();
     }
 
-    public interface StartLoading{
+    public interface StartLoading {
         void startLoading();
     }
 

@@ -149,11 +149,12 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         final String minMagnitude = sharedPrefs.getString(getString(R.string.settings_min_magnitude_key), getString(R.string.settings_min_magnitude_default));
         final String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+        final String limitRow = sharedPrefs.getString(getString(R.string.settings_limit_row_key), getString(R.string.settings_limit_row_default));
         final Uri baseUri = Uri.parse(baseUriString);
         final Uri.Builder uriBuilder = baseUri.buildUpon();
-
         uriBuilder.appendQueryParameter("format", "geojson");
-        uriBuilder.appendQueryParameter("limit", "10");
+
+        uriBuilder.appendQueryParameter("limit", limitRow);
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
         uriBuilder.appendQueryParameter("orderby", orderBy);
         return uriBuilder.toString();

@@ -59,11 +59,14 @@ Casi risolti:
 TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
 2) usare le https://developer.android.com/guide/topics/ui/layout/recyclerview.html
-3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonschema2pojo.org/)
+OK 3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonschema2pojo.org/)
 4) shrink code: https://developer.android.com/studio/build/shrink-code
 5) provare la classe OkHttpClient https://github.com/square/okhttp
 6) provare la classe Retrofit https://square.github.io/retrofit/
 7) usare altro al posto dei deprecati PreferenceFragment, Preference, ListPreference
+8) per i dettagli inserire scelta tra apertura pagina esterna o activity interna (webview)
+9) per le coordinate inserire scelta tra apertura maps esterno o activity interna
+10) migliorare l'url di richiesta informazioni
 
 Altri link utili:
 http://www.json.org/

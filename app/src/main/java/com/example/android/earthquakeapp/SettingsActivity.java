@@ -30,6 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
             final Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);
 
+            final Preference limitRow = findPreference(getString(R.string.settings_limit_row_key));
+            bindPreferenceSummaryToValue(limitRow);
+
+            // TODO add choose between external web-page or internal activity
+            // TODO add choose between external maps or internal activity
         }
 
         /**

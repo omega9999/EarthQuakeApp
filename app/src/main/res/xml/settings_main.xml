@@ -15,4 +15,11 @@
         android:selectAllOnFocus="true"
         android:title="@string/settings_min_magnitude_label" />
 
+    <ListPreference
+        android:defaultValue="@string/settings_limit_row_default"
+        android:entries="@array/settings_limit_row_values"
+        android:entryValues="@array/settings_limit_row_values"
+        android:key="@string/settings_limit_row_key"
+        android:title="@string/settings_limit_row_label" />
+
 </PreferenceScreen>
