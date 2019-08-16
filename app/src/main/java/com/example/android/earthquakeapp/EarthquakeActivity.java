@@ -157,6 +157,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         uriBuilder.appendQueryParameter("limit", limitRow);
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
         uriBuilder.appendQueryParameter("orderby", orderBy);
+        //uriBuilder.appendQueryParameter("offset", "1");
+        //uriBuilder.appendQueryParameter("endtime", "2019-08-16"); // default present
+        //uriBuilder.appendQueryParameter("starttime", "2019-08-16"); // default now - 30 days
         return uriBuilder.toString();
     }
 
@@ -165,6 +168,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     private ProgressBar mProgressBar;
 
     private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
+    private static final String BASE_USGS_COUNT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/count";
 
     private static final String BASE_URL = "BASE_URL";
     private static final int EARTHQUAKE_LOADER_ID = 1;

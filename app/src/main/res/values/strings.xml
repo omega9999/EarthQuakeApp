@@ -9,7 +9,9 @@
     <string name="settings_title">Earthquake Settings</string>
     <string name="settings_min_magnitude_label">Minimum Magnitude</string>
     <string name="settings_order_by_label">Order By</string>
-    <string name="settings_order_by_magnitude_label">Magnitude</string>
-    <string name="settings_order_by_most_recent_label">Most Recent</string>
+    <string name="settings_order_by_magnitude_desc_label">Magnitude (Desc)</string>
+    <string name="settings_order_by_most_recent_desc_label">Most Recent (Desc)</string>
+    <string name="settings_order_by_magnitude_asc_label">Magnitude (Asc)</string>
+    <string name="settings_order_by_most_recent_asc_label">Most Recent (Asc)</string>
     <string name="settings_limit_row_label">Max size result</string>
 </resources>
