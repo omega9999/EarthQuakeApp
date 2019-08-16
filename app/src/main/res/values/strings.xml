@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Quake Report</string>
+    <string name="near_the">Near the</string>
+    <string name="separator">of</string>
+    <string name="no_earthquakes">No earthquakes found.</string>
+    <string name="loading_data">Loading data…</string>
+    <string name="no_internet">No internet connection.</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Earthquake Settings</string>
+    <string name="settings_min_magnitude_label">Minimum Magnitude</string>
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_magnitude_label">Magnitude</string>
+    <string name="settings_order_by_most_recent_label">Most Recent</string>
+</resources>
