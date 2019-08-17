@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
@@ -55,12 +56,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         earthquakeListView.setEmptyView(this.mEmptyList);
 
         earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
+            // listener on row, not into a single piece of it
             final Earthquake earthquake = mAdapter.getItem(position);
+
             if (earthquake.getUrl() != null) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
+                Log.w(TAG,String.format("View id %1$s, id %2$s, id target %3$s",view.getId(), id, R.id.web));
             }
         });
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,8 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             final TextView locationOffset = root.findViewById(R.id.location_offset);
             final TextView date = root.findViewById(R.id.date);
             final TextView time = root.findViewById(R.id.time);
+            final View web = root.findViewById(R.id.web);
+            final View mapSearch = root.findViewById(R.id.map_search);
 
             if (position % 2 == 0){
                 root.setBackgroundResource(R.color.backgroundColorEven);
@@ -46,6 +49,25 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             else{
                 root.setBackgroundResource(R.color.backgroundColorOdd);
             }
+
+
+            if (earthquake.getUrl() != null) {
+                web.setVisibility(View.VISIBLE);
+
+                web.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), earthquake.getPrimaryLocation(), Toast.LENGTH_SHORT).show();
+                    /*
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                    */
+                });
+            }
+            if (earthquake.isCoordinates()){
+                mapSearch.setVisibility(View.VISIBLE);
+            }
+
 
             GradientDrawable magnitudeCircle = (GradientDrawable) magnitude.getBackground();
             int magnitudeColor = getMagnitudeColor(earthquake.getMagnitude());
@@ -103,6 +125,8 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         }
         return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
     }
+
+
 
     //TODO see https://developer.android.com/reference/java/text/SimpleDateFormat.html
     private final SimpleDateFormat mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
