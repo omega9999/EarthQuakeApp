@@ -55,12 +55,32 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
             return JsonUtils.convertFromJSON(getContext(), connection.makeHttpGetRequest());
         } catch (Exception e) {
             Log.e(TAG, "Problem", e);
+            return (new ErrorList<Earthquake>()).setException(e);
         }
-        return new ArrayList<>();
     }
 
     public interface StartLoading {
         void startLoading();
+    }
+
+    /**
+     * class to indicate there are errors
+     *
+     * @param <T>
+     */
+    public class ErrorList<T> extends ArrayList<T> {
+
+        public Exception getException() {
+            return mException;
+        }
+
+
+        public ErrorList<T> setException(Exception exception) {
+            this.mException = exception;
+            return this;
+        }
+
+        private Exception mException;
     }
 
     private final String mUrl;
