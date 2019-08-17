@@ -32,15 +32,15 @@ public class HttpConnection {
      * @throws HttpException throw if there are problem
      */
     public String makeHttpGetRequest() throws HttpException {
-        Log.d(TAG,"start of method makeHttpGetRequest");
+        Log.d(TAG, "start of method makeHttpGetRequest");
         String jsonResponse;
 
         HttpURLConnection urlConnection = null;
         try {
             urlConnection = (HttpURLConnection) this.mUrl.openConnection();
             urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000);
-            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(TIMEOUT);
+            urlConnection.setConnectTimeout((int) (TIMEOUT * 1.5));
             urlConnection.connect();
 
             if (urlConnection.getResponseCode() == 200) {
@@ -57,14 +57,15 @@ public class HttpConnection {
                 urlConnection.disconnect();
             }
         }
-        Log.d(TAG,"end of method makeHttpGetRequest");
+        Log.d(TAG, "end of method makeHttpGetRequest");
         return jsonResponse;
     }
 
     public class HttpException extends Exception {
         /**
          * constructor for http error code
-         * @param statusCode int for http error (i.e. 404, 400,...)
+         *
+         * @param statusCode    int for http error (i.e. 404, 400,...)
          * @param statusMessage {@code String} with message error
          */
         HttpException(final int statusCode, @Nullable final String statusMessage) {
@@ -76,6 +77,7 @@ public class HttpConnection {
 
         /**
          * constructor for exception
+         *
          * @param throwable original exception
          */
         HttpException(@NonNull final Throwable throwable) {
@@ -112,6 +114,8 @@ public class HttpConnection {
     }
 
     private final URL mUrl;
+
+    private static final int TIMEOUT = 60 * 1000;
 
     private static final String TAG = HttpConnection.class.getSimpleName();
 }
