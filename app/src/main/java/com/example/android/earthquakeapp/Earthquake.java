@@ -88,6 +88,15 @@ public class Earthquake {
         return this;
     }
 
+    public boolean isCoordinates() {
+        return mCoordinates;
+    }
+
+    public Earthquake setCoordinates(boolean hasCoordinates) {
+        this.mCoordinates = hasCoordinates;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,6 +111,7 @@ public class Earthquake {
         return mId.hashCode();
     }
 
+    private boolean mCoordinates = false;
     private double mMagnitude;
     private String mPrimaryLocation;
     private String mLocationOffset;
