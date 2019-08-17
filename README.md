@@ -40,6 +40,7 @@ Casi risolti:
 11) utilizzo di SharedPreferences e option menu': 
     https://developer.android.com/reference/android/content/SharedPreferences.html
     https://developer.android.com/guide/topics/data/data-storage.html#pref
+    https://developer.android.com/guide/topics/ui/menus.html
     (deprecato) https://developer.android.com/reference/android/preference/PreferenceFragment.html
     (deprecato) https://developer.android.com/reference/android/preference/Preference.html
     (deprecato) https://developer.android.com/reference/android/preference/ListPreference.html
