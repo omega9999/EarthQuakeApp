@@ -11,18 +11,31 @@
 
     <TextView
         android:id="@+id/magnitude"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_gravity="center_vertical"
+        style="@style/IconListStyle"
         android:background="@drawable/magnitude_circle"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
         tools:targetApi="jelly_bean"
         tools:text="8.9" />
 
+    <ImageView
+        android:id="@+id/map_search"
+        android:src="?selectableItemBackgroundBorderless"
+        style="@style/IconListStyle"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        android:background="@mipmap/ic_map_search"
+        tools:targetApi="jelly_bean" />
+
+    <ImageView
+        android:id="@+id/web"
+        android:src="?selectableItemBackgroundBorderless"
+        style="@style/IconListStyle"
+        android:background="@mipmap/ic_web"
+        android:visibility="gone"
+        tools:targetApi="jelly_bean" />
+
     <LinearLayout
+        android:id="@+id/container_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -56,31 +69,10 @@
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/map_search"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
-            android:clickable="true"
-            android:src="@mipmap/ic_map_search"
-            android:focusable="true" />
-        <ImageView
-            android:id="@+id/web"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:clickable="true"
-            android:src="@mipmap/ic_web"
-            android:focusable="true" />
 
-    </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/container_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
