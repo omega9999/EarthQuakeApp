@@ -36,8 +36,11 @@ public class SettingsActivity extends AppCompatActivity {
             final Preference startTimeLimit = findPreference(getString(R.string.settings_start_time_limit_key));
             bindPreferenceSummaryToValue(startTimeLimit);
 
-            // TODO add choose between external web-page or internal activity
-            // TODO add choose between external maps or internal activity
+            final Preference webOpen = findPreference(getString(R.string.settings_web_open_key));
+            bindPreferenceSummaryToValue(webOpen);
+
+            final Preference mapOpne = findPreference(getString(R.string.settings_map_open_key));
+            bindPreferenceSummaryToValue(mapOpne);
         }
 
         /**
@@ -57,8 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
                     final CharSequence[] labels = listPreference.getEntries();
                     preference.setSummary(labels[prefIndex]);
                 }
-            }
-            else{
+            } else {
                 preference.setSummary(stringValue);
             }
             return true;
