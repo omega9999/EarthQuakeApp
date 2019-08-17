@@ -1,12 +1,14 @@
 <resources>
     <string name="settings_min_magnitude_key" translatable="false">min_magnitude</string>
     <string name="settings_min_magnitude_default" translatable="false">6</string>
+
     <string name="settings_order_by_key" translatable="false">order_by</string>
     <string name="settings_order_by_default" translatable="false">@string/settings_order_by_magnitude_desc_value</string>
     <string name="settings_order_by_magnitude_desc_value" translatable="false">magnitude</string>
     <string name="settings_order_by_most_recent_desc_value" translatable="false">time</string>
     <string name="settings_order_by_magnitude_asc_value" translatable="false">magnitude-asc</string>
     <string name="settings_order_by_most_recent_asc_value" translatable="false">time-asc</string>
+
     <string name="settings_limit_row_key" translatable="false">limit_row</string>
     <string name="settings_limit_row_default" translatable="false">@string/settings_limit_row_10_value</string>
     <string name="settings_limit_row_10_value" translatable="false">10</string>
@@ -18,4 +20,19 @@
     <string name="settings_limit_row_10000_value" translatable="false">10000</string>
     <!-- max value is 20000 -->
     <string name="settings_limit_row_20000_value" translatable="false">20000</string>
+
+    <string name="settings_start_time_limit_key" translatable="false">start_time_limit</string>
+    <string name="settings_start_time_limit_default" translatable="false">@string/settings_start_time_limit_30_value</string>
+    <string name="settings_start_time_limit_7_value"  translatable="false">7</string>
+    <string name="settings_start_time_limit_30_value"  translatable="false">30</string>
+    <string name="settings_start_time_limit_60_value"  translatable="false">60</string>
+    <string name="settings_start_time_limit_90_value"  translatable="false">90</string>
+    <string name="settings_start_time_limit_180_value"  translatable="false">180</string>
+    <string name="settings_start_time_limit_365_value" translatable="false">365</string>
+    <string name="settings_start_time_limit_730_value" translatable="false">730</string>
+    <string name="settings_start_time_limit_1095_value" translatable="false">1095</string>
+    <string name="settings_start_time_limit_1826_value" translatable="false">1826</string>
+    <string name="settings_start_time_limit_3652_value" translatable="false">3652</string>
+
+
 </resources>

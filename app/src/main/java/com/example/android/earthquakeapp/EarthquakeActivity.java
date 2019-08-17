@@ -23,8 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 /*
 TODO Programmable Web API Directory: http://www.programmableweb.com/apis/directory
@@ -118,7 +122,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         this.mEmptyList.setText(null);
         this.mProgressBar.setVisibility(View.GONE);
         if (earthquakes.size() == 0) {
-            this.mEmptyList.setText(getString(R.string.no_earthquakes));
+            if (earthquakes instanceof EarthquakeLoader.ErrorList) {
+                this.mEmptyList.setText(getString(R.string.error_earthquakes));
+            } else {
+                this.mEmptyList.setText(getString(R.string.no_earthquakes));
+            }
         }
         mAdapter.addAll(earthquakes);
     }
@@ -150,16 +158,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         final String minMagnitude = sharedPrefs.getString(getString(R.string.settings_min_magnitude_key), getString(R.string.settings_min_magnitude_default));
         final String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
         final String limitRow = sharedPrefs.getString(getString(R.string.settings_limit_row_key), getString(R.string.settings_limit_row_default));
+        final int startTimeLimit = Integer.valueOf(sharedPrefs.getString(getString(R.string.settings_start_time_limit_key), getString(R.string.settings_start_time_limit_default)));
         final Uri baseUri = Uri.parse(baseUriString);
         final Uri.Builder uriBuilder = baseUri.buildUpon();
         uriBuilder.appendQueryParameter("format", "geojson");
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -1 * startTimeLimit);
 
         uriBuilder.appendQueryParameter("limit", limitRow);
         uriBuilder.appendQueryParameter("minmag", minMagnitude);
         uriBuilder.appendQueryParameter("orderby", orderBy);
         //uriBuilder.appendQueryParameter("offset", "1");
         //uriBuilder.appendQueryParameter("endtime", "2019-08-16"); // default present
-        //uriBuilder.appendQueryParameter("starttime", "2019-08-16"); // default now - 30 days
+        uriBuilder.appendQueryParameter("starttime", DATE_FORMAT.format(calendar.getTime())); // default now - 30 days
         return uriBuilder.toString();
     }
 
@@ -172,6 +184,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     private static final String BASE_URL = "BASE_URL";
     private static final int EARTHQUAKE_LOADER_ID = 1;
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
 

@@ -33,6 +33,9 @@ public class SettingsActivity extends AppCompatActivity {
             final Preference limitRow = findPreference(getString(R.string.settings_limit_row_key));
             bindPreferenceSummaryToValue(limitRow);
 
+            final Preference startTimeLimit = findPreference(getString(R.string.settings_start_time_limit_key));
+            bindPreferenceSummaryToValue(startTimeLimit);
+
             // TODO add choose between external web-page or internal activity
             // TODO add choose between external maps or internal activity
         }

@@ -3,6 +3,7 @@
     <string name="near_the">Near the</string>
     <string name="separator">of</string>
     <string name="no_earthquakes">No earthquakes found.</string>
+    <string name="error_earthquakes">Error searching earthquake.</string>
     <string name="loading_data">Loading data…</string>
     <string name="no_internet">No internet connection.</string>
     <string name="settings_menu_item">Settings</string>
@@ -14,4 +15,16 @@
     <string name="settings_order_by_magnitude_asc_label">Magnitude (Asc)</string>
     <string name="settings_order_by_most_recent_asc_label">Most Recent (Asc)</string>
     <string name="settings_limit_row_label">Max size result</string>
+    <string name="settings_start_time_limit_label">Number of days into past</string>
+
+    <string name="settings_start_time_limit_7_label" >7 (1 week)</string>
+    <string name="settings_start_time_limit_30_label" >30 (1 month)</string>
+    <string name="settings_start_time_limit_60_label" >60 (2 months)</string>
+    <string name="settings_start_time_limit_90_label" >90 (3 months)</string>
+    <string name="settings_start_time_limit_180_label" >180 (6 months)</string>
+    <string name="settings_start_time_limit_365_label">365 (1 year)</string>
+    <string name="settings_start_time_limit_730_label">730 (2 years)</string>
+    <string name="settings_start_time_limit_1095_label">1095 (3 years)</string>
+    <string name="settings_start_time_limit_1826_label">1826 (5 years)</string>
+    <string name="settings_start_time_limit_3652_label">3652 (10 years)</string>
 </resources>

@@ -24,4 +24,31 @@
         <item>@string/settings_limit_row_10000_value</item>
         <item>@string/settings_limit_row_20000_value</item>
     </string-array>
+
+    <string-array name="settings_start_time_limit_values">
+        <item>@string/settings_start_time_limit_7_value</item>
+        <item>@string/settings_start_time_limit_30_value</item>
+        <item>@string/settings_start_time_limit_60_value</item>
+        <item>@string/settings_start_time_limit_90_value</item>
+        <item>@string/settings_start_time_limit_180_value</item>
+        <item>@string/settings_start_time_limit_365_value</item>
+        <item>@string/settings_start_time_limit_730_value</item>
+        <item>@string/settings_start_time_limit_1095_value</item>
+        <item>@string/settings_start_time_limit_1826_value</item>
+        <item>@string/settings_start_time_limit_3652_value</item>
+    </string-array>
+
+    <string-array name="settings_start_time_limit_labels">
+        <item>@string/settings_start_time_limit_7_label</item>
+        <item>@string/settings_start_time_limit_30_label</item>
+        <item>@string/settings_start_time_limit_60_label</item>
+        <item>@string/settings_start_time_limit_90_label</item>
+        <item>@string/settings_start_time_limit_180_label</item>
+        <item>@string/settings_start_time_limit_365_label</item>
+        <item>@string/settings_start_time_limit_730_label</item>
+        <item>@string/settings_start_time_limit_1095_label</item>
+        <item>@string/settings_start_time_limit_1826_label</item>
+        <item>@string/settings_start_time_limit_3652_label</item>
+    </string-array>
+
 </resources>
