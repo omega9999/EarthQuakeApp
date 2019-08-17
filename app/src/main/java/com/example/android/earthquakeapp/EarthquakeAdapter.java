@@ -1,7 +1,6 @@
 package com.example.android.earthquakeapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +40,12 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             final TextView date = root.findViewById(R.id.date);
             final TextView time = root.findViewById(R.id.time);
 
+            if (position % 2 == 0){
+                root.setBackgroundResource(R.color.backgroundColorEven);
+            }
+            else{
+                root.setBackgroundResource(R.color.backgroundColorOdd);
+            }
 
             GradientDrawable magnitudeCircle = (GradientDrawable) magnitude.getBackground();
             int magnitudeColor = getMagnitudeColor(earthquake.getMagnitude());
