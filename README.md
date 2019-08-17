@@ -30,11 +30,6 @@ Casi risolti:
     (deprecato) https://developer.android.com/reference/android/app/LoaderManager.html
     (deprecato) https://developer.android.com/reference/android/app/LoaderManager.LoaderCallbacks.html
     (deprecato) esempio: https://www.concretepage.com/android/android-asynctaskloader-example-with-listview-and-baseadapter
-     ViewModels + LiveData: https://developer.android.com/reference/androidx/lifecycle/ViewModel +  https://developer.android.com/reference/androidx/lifecycle/LiveData
-     MediatorLiveData https://developer.android.com/reference/androidx/lifecycle/MediatorLiveData
-     Room database https://developer.android.com/topic/libraries/architecture/room.html
-     LiveData guide: https://developer.android.com/topic/libraries/architecture/livedata.html
-     ViewModel guide: https://developer.android.com/topic/libraries/architecture/viewmodel.html
 9) Liste vuote: 
     https://developer.android.com/reference/android/widget/AdapterView.html#setEmptyView(android.view.View)
     https://material.google.com/patterns/empty-states.html
@@ -48,10 +43,6 @@ Casi risolti:
     (deprecato) https://developer.android.com/reference/android/preference/PreferenceFragment.html
     (deprecato) https://developer.android.com/reference/android/preference/Preference.html
     (deprecato) https://developer.android.com/reference/android/preference/ListPreference.html
-    https://developer.android.com/reference/androidx/preference/package-summary.html
-    https://developer.android.com/guide/topics/ui/settings.html
-    https://developer.android.com/guide/practices/screens_support
-    https://developer.android.com/training/basics/fragments/fragment-ui.html
 12)  Uri.Builder class: https://developer.android.com/reference/android/net/Uri.Builder.html
     
     
@@ -70,6 +61,16 @@ OK 3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonsch
 11) vedere se puo' essere utile: 
 	https://developers.google.com/maps/documentation/javascript/examples/layer-data-quakes
 	https://www.programmableweb.com/category/earthquakes/api
+12)  ViewModels + LiveData: https://developer.android.com/reference/androidx/lifecycle/ViewModel +  https://developer.android.com/reference/androidx/lifecycle/LiveData
+     MediatorLiveData https://developer.android.com/reference/androidx/lifecycle/MediatorLiveData
+     Room database https://developer.android.com/topic/libraries/architecture/room.html
+     LiveData guide: https://developer.android.com/topic/libraries/architecture/livedata.html
+     ViewModel guide: https://developer.android.com/topic/libraries/architecture/viewmodel.html
+13) Preferences nuove
+    https://developer.android.com/reference/androidx/preference/package-summary.html
+    https://developer.android.com/guide/topics/ui/settings.html
+    https://developer.android.com/guide/practices/screens_support
+    https://developer.android.com/training/basics/fragments/fragment-ui.html
 
 Altri link utili:
 http://www.json.org/
