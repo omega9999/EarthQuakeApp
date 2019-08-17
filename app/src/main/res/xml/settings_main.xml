@@ -29,4 +29,18 @@
         android:key="@string/settings_limit_row_key"
         android:title="@string/settings_limit_row_label" />
 
+    <ListPreference
+        android:defaultValue="@string/settings_web_open_default"
+        android:entries="@array/settings_web_open_labels"
+        android:entryValues="@array/settings_web_open_values"
+        android:key="@string/settings_web_open_key"
+        android:title="@string/settings_web_open_label" />
+
+    <ListPreference
+        android:defaultValue="@string/settings_map_open_default"
+        android:entries="@array/settings_map_open_labels"
+        android:entryValues="@array/settings_map_open_values"
+        android:key="@string/settings_map_open_key"
+        android:title="@string/settings_map_open_label" />
+
 </PreferenceScreen>

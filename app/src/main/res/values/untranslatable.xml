@@ -34,5 +34,14 @@
     <string name="settings_start_time_limit_1826_value" translatable="false">1826</string>
     <string name="settings_start_time_limit_3652_value" translatable="false">3652</string>
 
+    <string name="settings_web_open_key" translatable="false">web_open</string>
+    <string name="settings_web_open_default" translatable="false">@string/settings_web_open_external_value</string>
+    <string name="settings_web_open_external_value" translatable="false">web_open_external</string>
+    <string name="settings_web_open_internal_value" translatable="false">web_open_internal</string>
+
+    <string name="settings_map_open_key" translatable="false">map_open</string>
+    <string name="settings_map_open_default" translatable="false">@string/settings_map_open_external_value</string>
+    <string name="settings_map_open_external_value" translatable="false">map_open_external</string>
+    <string name="settings_map_open_internal_value" translatable="false">map_open_internal</string>
 
 </resources>
