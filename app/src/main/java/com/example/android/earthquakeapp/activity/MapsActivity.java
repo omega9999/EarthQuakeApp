@@ -1,9 +1,10 @@
-package com.example.android.earthquakeapp;
+package com.example.android.earthquakeapp.activity;
 
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 
+import com.example.android.earthquakeapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

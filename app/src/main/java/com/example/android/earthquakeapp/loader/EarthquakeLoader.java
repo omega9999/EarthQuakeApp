@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp;
+package com.example.android.earthquakeapp.loader;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.android.earthquakeapp.bean.Earthquake;
+import com.example.android.earthquakeapp.bean.ErrorList;
 import com.example.android.earthquakeapp.connection.HttpConnection;
 import com.example.android.earthquakeapp.geojson.JsonUtils;
 
@@ -23,7 +25,7 @@ import java.util.List;
  */
 public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
-    EarthquakeLoader(@NonNull final Context context, @Nullable final String url, @Nullable final StartLoading startLoadingCallBack) {
+    public EarthquakeLoader(@NonNull final Context context, @Nullable final String url, @Nullable final StartLoading startLoadingCallBack) {
         super(context);
         Log.i(TAG, String.format("URL GET: %1$s", url));
         this.mUrl = url;
@@ -51,37 +53,33 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
             if (TextUtils.isEmpty(this.mUrl)) {
                 return new ArrayList<>();
             }
+            this.checkLoad = false;
             final HttpConnection connection = new HttpConnection(this.mUrl);
-            return JsonUtils.convertFromJSON(getContext(), connection.makeHttpGetRequest());
+            final List<Earthquake> list = JsonUtils.convertFromJSON(getContext(), connection.makeHttpGetRequest());
+            this.checkLoad = true;
+            return list;
         } catch (Exception e) {
             Log.e(TAG, "Problem", e);
             return (new ErrorList<Earthquake>()).setException(e);
         }
     }
 
+    public boolean isCheckLoad(){
+        boolean res = this.checkLoad;
+        if (res){
+            this.checkLoad = false;
+        }
+        return res;
+    }
+
     public interface StartLoading {
         void startLoading();
     }
 
-    /**
-     * class to indicate there are errors
-     *
-     * @param <T>
-     */
-    public class ErrorList<T> extends ArrayList<T> {
-
-        public Exception getException() {
-            return mException;
-        }
 
 
-        public ErrorList<T> setException(Exception exception) {
-            this.mException = exception;
-            return this;
-        }
+    private boolean checkLoad = false;
 
-        private Exception mException;
-    }
 
     private final String mUrl;
     private final StartLoading mStartLoadingCallBack;

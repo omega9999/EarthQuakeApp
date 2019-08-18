@@ -6,8 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.android.earthquakeapp.Earthquake;
+import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.R;
+import com.example.android.earthquakeapp.bean.EarthquakeList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class JsonUtils {
         Log.d(TAG, "start of convertFromJSON method");
         final GeoJSON geoJSON = GeoJSON.createFromJSON(json);
         Log.d(TAG, "object GeoJSON created");
-        final ArrayList<Earthquake> earthquakes = new ArrayList<>();
+        final EarthquakeList earthquakes = new EarthquakeList();
         for (Feature feature : geoJSON.getFeatures()) {
             Earthquake earthquake = new Earthquake();
             Properties properties = feature.getProperties();
@@ -64,6 +65,8 @@ public class JsonUtils {
         Log.d(TAG, "end of convertFromJSON method");
         return earthquakes;
     }
+
+
 
     /**
      * convert string json into ArrayList<Earthquake> using {@code JSONObject}

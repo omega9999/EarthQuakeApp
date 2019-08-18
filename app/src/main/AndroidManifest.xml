@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WebActivity"></activity>
+        <activity android:name=".activity.WebActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,20 +31,20 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.earthquakeapp.EarthquakeActivity" />
+                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/settings_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.earthquakeapp.EarthquakeActivity" />
+                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
         </activity>
-        <activity android:name=".EarthquakeActivity">
+        <activity android:name=".activity.EarthquakeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

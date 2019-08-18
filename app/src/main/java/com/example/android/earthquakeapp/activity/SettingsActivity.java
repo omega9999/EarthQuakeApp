@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp;
+package com.example.android.earthquakeapp.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.earthquakeapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

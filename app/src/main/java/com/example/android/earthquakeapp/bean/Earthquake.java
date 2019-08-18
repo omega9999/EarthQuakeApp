@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp;
+package com.example.android.earthquakeapp.bean;
 
 import java.util.Date;
 

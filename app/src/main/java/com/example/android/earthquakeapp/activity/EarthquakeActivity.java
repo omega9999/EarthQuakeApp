@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp;
+package com.example.android.earthquakeapp.activity;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -24,8 +24,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.earthquakeapp.R;
+import com.example.android.earthquakeapp.bean.Earthquake;
+import com.example.android.earthquakeapp.bean.EarthquakeList;
+import com.example.android.earthquakeapp.bean.ErrorList;
+import com.example.android.earthquakeapp.loader.EarthquakeAdapter;
+import com.example.android.earthquakeapp.loader.EarthquakeLoader;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -51,7 +57,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         this.mEmptyList = findViewById(R.id.empty_view);
         this.mProgressBar = findViewById(R.id.loading_indicator);
 
-        this.mAdapter = new EarthquakeAdapter(this, new ArrayList<>());
+        this.mAdapter = new EarthquakeAdapter(this, new EarthquakeList());
         earthquakeListView.setAdapter(mAdapter);
         earthquakeListView.setEmptyView(this.mEmptyList);
 
@@ -122,13 +128,18 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         this.mEmptyList.setText(null);
         this.mProgressBar.setVisibility(View.GONE);
         if (earthquakes.size() == 0) {
-            if (earthquakes instanceof EarthquakeLoader.ErrorList) {
+            if (earthquakes instanceof ErrorList) {
                 this.mEmptyList.setText(getString(R.string.error_earthquakes));
             } else {
                 this.mEmptyList.setText(getString(R.string.no_earthquakes));
             }
         }
-        mAdapter.addAll(earthquakes);
+        else{
+            if(((EarthquakeLoader)loader).isCheckLoad()) {
+                Toast.makeText(this, getString(R.string.number_of_earthquakes, earthquakes.size()), Toast.LENGTH_SHORT).show();
+            }
+            mAdapter.addAll(earthquakes);
+        }
     }
 
     @Override
@@ -181,6 +192,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
     private static final String BASE_USGS_COUNT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/count";
+
 
     private static final String BASE_URL = "BASE_URL";
     private static final int EARTHQUAKE_LOADER_ID = 1;
