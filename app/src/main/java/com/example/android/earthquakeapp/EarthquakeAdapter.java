@@ -1,7 +1,10 @@
 package com.example.android.earthquakeapp;
 
-import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import java.text.DecimalFormat;
@@ -20,7 +24,7 @@ import java.util.Locale;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
-    EarthquakeAdapter(@NonNull final Activity activity, @NonNull final ArrayList<Earthquake> earthquakes) {
+    EarthquakeAdapter(@NonNull final AppCompatActivity activity, @NonNull final ArrayList<Earthquake> earthquakes) {
         super(activity, 0, earthquakes);
         this.mLayoutInflater = activity.getLayoutInflater();
     }
@@ -28,6 +32,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         View root = convertView;
         if (root == null) {
             root = this.mLayoutInflater.inflate(R.layout.earthquake_item, parent, false);
@@ -56,16 +61,45 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
                 web.setOnClickListener(v -> {
                     Toast.makeText(getContext(), earthquake.getPrimaryLocation(), Toast.LENGTH_SHORT).show();
-                    /*
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
+                    final String webOpen = sharedPrefs.getString(getContext().getString(R.string.settings_web_open_key), getContext().getString(R.string.settings_web_open_default));
+
+                    Intent intent = null;
+                    if (webOpen.equals(getContext().getString(R.string.settings_web_open_external_value))){
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(earthquake.getUrl()));
                     }
-                    */
+                    else if (webOpen.equals(getContext().getString(R.string.settings_web_open_internal_value))){
+                        intent = new Intent(getContext(), WebActivity.class);
+                    }
+
+                    if (intent != null){
+                        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                            getContext().startActivity(intent);
+                        }
+                    }
                 });
             }
             if (earthquake.isCoordinates()){
                 mapSearch.setVisibility(View.VISIBLE);
+                mapSearch.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), earthquake.getPrimaryLocation(), Toast.LENGTH_SHORT).show();
+                    final String mapOpen = sharedPrefs.getString(getContext().getString(R.string.settings_map_open_key), getContext().getString(R.string.settings_map_open_default));
+
+                    Intent intent = null;
+                    if (mapOpen != null) {
+                        if (mapOpen.equals(getContext().getString(R.string.settings_map_open_external_value))) {
+                            intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(String.format("geo:%1$s, %2$s", earthquake.getLongitude(), earthquake.getLatitude())));
+                        } else if (mapOpen.equals(getContext().getString(R.string.settings_map_open_internal_value))) {
+                            intent = new Intent(getContext(), MapsActivity.class);
+                        }
+                    }
+
+                    if (intent != null){
+                        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                            getContext().startActivity(intent);
+                        }
+                    }
+                });
             }
 
 
