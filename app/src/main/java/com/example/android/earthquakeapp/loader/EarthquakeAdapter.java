@@ -1,5 +1,6 @@
 package com.example.android.earthquakeapp.loader;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
@@ -14,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.android.earthquakeapp.R;
@@ -31,15 +31,15 @@ import java.util.Locale;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
-    public EarthquakeAdapter(@NonNull final AppCompatActivity activity, @NonNull final EarthquakeList earthquakes) {
-        super(activity, 0, earthquakes);
-        this.mLayoutInflater = activity.getLayoutInflater();
+    public EarthquakeAdapter(@NonNull final Context context, @NonNull final EarthquakeList earthquakes) {
+        super(context, 0, earthquakes);
+        this.mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public void addAll(@NonNull Collection<? extends Earthquake> collection) {
-        if (collection instanceof EarthquakeList){
-            final EarthquakeList list = (EarthquakeList)collection;
+        if (collection instanceof EarthquakeList) {
+            final EarthquakeList list = (EarthquakeList) collection;
             this.mMinMagnitude = list.getMinMagnitude();
             this.mMaxMagnitude = list.getMaxMagnitude();
             this.mMinTime = list.getMinTime();
@@ -66,10 +66,9 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             final View web = root.findViewById(R.id.web);
             final View mapSearch = root.findViewById(R.id.map_search);
 
-            if (position % 2 == 0){
+            if (position % 2 == 0) {
                 root.setBackgroundResource(R.color.backgroundColorEven);
-            }
-            else{
+            } else {
                 root.setBackgroundResource(R.color.backgroundColorOdd);
             }
 
@@ -83,25 +82,24 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
                     Intent intent = null;
                     if (webOpen != null) {
-                        if (webOpen.equals(getContext().getString(R.string.settings_web_open_external_value))){
+                        if (webOpen.equals(getContext().getString(R.string.settings_web_open_external_value))) {
                             intent = new Intent(Intent.ACTION_VIEW);
                             intent.setData(Uri.parse(earthquake.getUrl()));
-                        }
-                        else if (webOpen.equals(getContext().getString(R.string.settings_web_open_internal_value))){
+                        } else if (webOpen.equals(getContext().getString(R.string.settings_web_open_internal_value))) {
                             //TODO implement activity WebActivity
                             intent = new Intent(getContext(), WebActivity.class);
                             intent.setData(Uri.parse(earthquake.getUrl()));
                         }
                     }
 
-                    if (intent != null){
+                    if (intent != null) {
                         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
                             getContext().startActivity(intent);
                         }
                     }
                 });
             }
-            if (earthquake.isCoordinates()){
+            if (earthquake.isCoordinates()) {
                 mapSearch.setVisibility(View.VISIBLE);
                 mapSearch.setOnClickListener(v -> {
                     Toast.makeText(getContext(), earthquake.getPrimaryLocation(), Toast.LENGTH_SHORT).show();
@@ -110,7 +108,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
                     Intent intent = null;
                     if (mapOpen != null) {
                         if (mapOpen.equals(getContext().getString(R.string.settings_map_open_external_value))) {
-                            final String label = Uri.encode(String.format("Earthquake of %1$s",DECIMAL_FORMAT.format(earthquake.getMagnitude())));
+                            final String label = Uri.encode(String.format("Earthquake of %1$s", DECIMAL_FORMAT.format(earthquake.getMagnitude())));
                             intent = new Intent(Intent.ACTION_VIEW);
                             //TODO bugfix: https://developers.google.com/maps/documentation/urls/android-intents
                             intent.setData(Uri.parse(String.format("geo:%1$s, %2$s?z=3&q=(%3$s)@%1$s,%2$s", earthquake.getLatitude(), earthquake.getLongitude(), label)));
@@ -120,7 +118,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
                         }
                     }
 
-                    if (intent != null){
+                    if (intent != null) {
                         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
                             getContext().startActivity(intent);
                         }
@@ -142,13 +140,14 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         return root;
     }
 
-    private double getTimeAlpha(@NonNull final Date date){
+    private double getTimeAlpha(@NonNull final Date date) {
         // TODO scale from 0.1 to 1.0 relative scale (min/max) from preferences
         return 1;
     }
 
     /**
      * TODO make color scale absolute and relative scale (min/max) from preferences
+     *
      * @param magnitude
      * @return
      */
