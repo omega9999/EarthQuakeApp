@@ -89,6 +89,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
                             //TODO implement activity WebActivity
                             intent = new Intent(getContext(), WebActivity.class);
                             intent.setData(Uri.parse(earthquake.getUrl()));
+                            intent.putExtra(WebActivity.TITLE,earthquake.getLocationOffset() + " " + earthquake.getPrimaryLocation());
                         }
                     }
 

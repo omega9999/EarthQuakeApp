@@ -66,24 +66,36 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             final Earthquake earthquake = mAdapter.getItem(position);
 
             if (earthquake.getUrl() != null) {
-                Log.w(TAG,String.format("View id %1$s, id %2$s, id target %3$s",view.getId(), id, R.id.web));
+                Log.w(TAG, String.format("View id %1$s, id %2$s, id target %3$s", view.getId(), id, R.id.web));
             }
         });
 
-        if (!isConnected(this)) {
+        final Bundle bundle = new Bundle();
+        bundle.putString(BASE_URL, BASE_USGS_REQUEST_URL);
+
+        if (checkConnection()){
+            // TODO deprecated
+            Log.d(TAG, "LOADER initLoader()");
+            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, bundle, this);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnection();
+    }
+
+    private boolean checkConnection(){
+        boolean isConnected = isConnected(this);
+        if (!isConnected){
             this.mEmptyList.setText(getString(R.string.no_internet));
             this.mEmptyList.setVisibility(View.VISIBLE);
         } else {
             this.mEmptyList.setText(null);
             this.mEmptyList.setVisibility(View.GONE);
-
-            final Bundle bundle = new Bundle();
-            bundle.putString(BASE_URL, BASE_USGS_REQUEST_URL);
-
-            // TODO deprecated
-            Log.d(TAG, "LOADER initLoader()");
-            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, bundle, this);
         }
+        return isConnected;
     }
 
     /**
@@ -133,9 +145,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             } else {
                 this.mEmptyList.setText(getString(R.string.no_earthquakes));
             }
-        }
-        else{
-            if(((EarthquakeLoader)loader).isCheckLoad()) {
+        } else {
+            if (((EarthquakeLoader) loader).isCheckLoad()) {
                 Toast.makeText(this, getString(R.string.number_of_earthquakes, earthquakes.size()), Toast.LENGTH_SHORT).show();
             }
             mAdapter.addAll(earthquakes);
