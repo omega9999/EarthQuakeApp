@@ -112,7 +112,6 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
                 mapSearch.setOnClickListener(v -> {
                     Toast.makeText(getContext(), earthquake.getPrimaryLocation(), Toast.LENGTH_SHORT).show();
                     final String mapOpen = sharedPrefs.getString(getContext().getString(R.string.settings_map_open_key), getContext().getString(R.string.settings_map_open_default));
-
                     Intent intent = null;
                     if (mapOpen != null) {
                         final String label = Uri.encode(String.format("Earthquake of %1$s", UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude())));
@@ -147,8 +146,8 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             magnitude.setText(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
             location.setText(earthquake.getPrimaryLocation());
             locationOffset.setText(earthquake.getLocationOffset());
-            date.setText(mDateFormat.format(earthquake.getDate()));
-            time.setText(mTimeFormat.format(earthquake.getDate()));
+            date.setText(UiUtils.DATE_FORMAT.format(earthquake.getDate()));
+            time.setText(UiUtils.TIME_FORMAT.format(earthquake.getDate()));
         }
         return root;
     }
@@ -158,17 +157,12 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         return 1;
     }
 
-
-
-
     private Earthquake mMinMagnitude = null;
     private Earthquake mMaxMagnitude = null;
     private Earthquake mMinTime = null;
     private Earthquake mMaxTime = null;
 
     //TODO see https://developer.android.com/reference/java/text/SimpleDateFormat.html
-    private final SimpleDateFormat mDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    private final SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     private final LayoutInflater mLayoutInflater;
 
     private final ArrayList<Earthquake> mEarthquakes = new ArrayList<>();

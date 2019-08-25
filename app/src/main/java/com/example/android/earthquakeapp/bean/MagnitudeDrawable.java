@@ -28,18 +28,15 @@ public class MagnitudeDrawable extends Drawable {
     public MagnitudeDrawable(@NonNull final Context context, @NonNull final Earthquake earthquake) {
         this.earthquake = earthquake;
 
+        mRadius = dipToPixels(context, 18);
         int magnitudeColor = ContextCompat.getColor(context, earthquake.getMagnitudeColorIdRef());
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setColor(magnitudeColor);
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        mRadius = dipToPixels(context,18);
-
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(context.getColor(android.R.color.white));
-
-
         textPaint.setTypeface(Typeface.SANS_SERIF);
         textPaint.setTextSize(sipToPixels(context, 16));
         textPaint.setAntiAlias(true);
@@ -49,34 +46,25 @@ public class MagnitudeDrawable extends Drawable {
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public static float dipToPixels(Context context, float dipValue){
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,  dipValue, metrics);
-    }
-
-    public static float sipToPixels(Context context, float sipValue){
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,  sipValue, metrics);
-    }
 
     @Override
     public void draw(Canvas canvas) {
-        Log.d(TAG,"drawCanvas");
+        Log.d(TAG, "drawCanvas");
         float radius = mRadius;
-        canvas.drawCircle(radius,radius,radius,circlePaint);
+        canvas.drawCircle(radius, radius, radius, circlePaint);
         canvas.drawText(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()), radius, radius * 1.3f, textPaint);
     }
 
     @Override
     public void setAlpha(int alpha) {
-        Log.d(TAG,"setAlpha " + alpha);
+        Log.d(TAG, "setAlpha " + alpha);
         circlePaint.setAlpha(alpha);
         textPaint.setAlpha(alpha);
     }
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-        Log.d(TAG,"setColorFilter " + cf);
+        Log.d(TAG, "setColorFilter " + cf);
         circlePaint.setColorFilter(cf);
         textPaint.setColorFilter(cf);
     }
@@ -86,12 +74,22 @@ public class MagnitudeDrawable extends Drawable {
         return PixelFormat.OPAQUE;
     }
 
-    public int getIntrinsicWidth(){
-        return (int)(mRadius * 2);
+    public int getIntrinsicWidth() {
+        return (int) (mRadius * 2);
     }
 
-    public int getIntrinsicHeight(){
+    public int getIntrinsicHeight() {
         return getIntrinsicWidth();
+    }
+
+    private static float dipToPixels(Context context, float dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
+    }
+
+    private static float sipToPixels(Context context, float sipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sipValue, metrics);
     }
 
     private static final String TAG = MagnitudeDrawable.class.getSimpleName();

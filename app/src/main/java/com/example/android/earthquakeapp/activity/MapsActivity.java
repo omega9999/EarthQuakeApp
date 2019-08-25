@@ -1,11 +1,11 @@
 package com.example.android.earthquakeapp.activity;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.android.earthquakeapp.R;
@@ -20,23 +20,36 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final String EARTHQUAKES = "EARTHQUAKES";
-
-
+    public static final String EARTHQUAKES = MapsActivity.class.getPackage() + ".EARTHQUAKES";
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            NavUtils.navigateUpFromSameTask(MapsActivity.this);
+        });
+
         if (getIntent() != null) {
-            ArrayList<Earthquake> list = getIntent().getParcelableArrayListExtra(EARTHQUAKES);
-            mEarthquakes.addAll(list);
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                for (String key : bundle.keySet()){
+                    if (key.startsWith(EARTHQUAKES)){
+                        final ArrayList<Earthquake> list = bundle.getParcelableArrayList(key);
+                        if (list != null) {
+                            mEarthquakes.addAll(list);
+                        }
+                    }
+                }
+            }
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -61,10 +74,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         LatLng centerCoords = new LatLng(0, 0);
-        double latMed = centerCoords.latitude;
-        double lonMed = centerCoords.longitude;
+        double latMin;
+        double lonMin;
+        double latMax;
+        double lonMax;
         int zoom = 4;
         if (mEarthquakes.size() > 0){
+            latMin = mEarthquakes.get(0).getLatitude();
+            lonMin = mEarthquakes.get(0).getLongitude();
+            latMax = mEarthquakes.get(0).getLatitude();
+            lonMax = mEarthquakes.get(0).getLongitude();
+
             for (Earthquake earthquake : mEarthquakes){
                 final MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
@@ -72,17 +92,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
                 final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
                 options.icon(icon);
-                options.title(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
+                options.title(getTitle(earthquake));
                 mMap.addMarker(options);
-                latMed += earthquake.getLatitude();
-                lonMed += earthquake.getLongitude();
+
+                latMin = Math.min(latMin,earthquake.getLatitude());
+                lonMin = Math.min(lonMin,earthquake.getLongitude());
+                latMax = Math.max(latMax,earthquake.getLatitude());
+                lonMax = Math.max(lonMax,earthquake.getLongitude());
             }
-            latMed /= mEarthquakes.size();
-            lonMed /= mEarthquakes.size();
-            centerCoords = new LatLng(latMed, lonMed);
+
+            double delta = Math.max(Math.abs(latMax - latMin), Math.abs(lonMax - lonMin));
+            if (delta >= 0 && delta < 3){
+                zoom = 4;
+            }
+            else{
+                zoom = 1;
+            }
+
+            centerCoords = new LatLng((latMax + latMin) / 2, (lonMax + lonMin) / 2);
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerCoords,zoom));
+    }
+
+    private String getTitle(Earthquake earthquake){
+        final StringBuilder builder = new StringBuilder();
+        builder.append("M ").append(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
+        builder.append(" - ").append(UiUtils.DATE_FORMAT.format(earthquake.getDate()));
+        builder.append(" - ").append(earthquake.getLocationOffset()).append(" ").append(earthquake.getPrimaryLocation());
+        return builder.toString();
     }
 
 

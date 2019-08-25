@@ -8,10 +8,15 @@ import android.graphics.drawable.Drawable;
 import com.example.android.earthquakeapp.R;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class UiUtils {
 
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss", Locale.ITALIAN);
+
 
     public static int getMagnitudeColorIdRef(final double magnitude) {
         int magnitudeColorResourceId = R.color.magnitude1;

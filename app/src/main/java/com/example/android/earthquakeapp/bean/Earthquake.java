@@ -37,53 +37,32 @@ public class Earthquake implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(double2String(mMagnitude));
+        dest.writeDouble((mMagnitude));
         dest.writeString(mPrimaryLocation);
         dest.writeString(mLocationOffset);
         dest.writeLong(mDate.getTime());
-        dest.writeString(mUrl);
-        dest.writeString(mId);
-        dest.writeString(double2String(mLongitude));
-        dest.writeString(double2String(mLatitude));
-        dest.writeString(double2String(mDept));
+        //dest.writeString(mUrl);
+        //dest.writeString(mId);
+        dest.writeDouble((mLongitude));
+        dest.writeDouble((mLatitude));
+        dest.writeDouble((mDept));
     }
 
     public Earthquake(Parcel in) {
         this();
         if (in != null) {
-            this.setMagnitude(string2Double(in.readString()));
+            this.setMagnitude((in.readDouble()));
             this.setPrimaryLocation(in.readString());
             this.setLocationOffset(in.readString());
             this.setDate(new Date(in.readLong()));
-            this.setUrl(in.readString());
-            this.setId(in.readString());
-            this.setLongitude(string2Double(in.readString()));
-            this.setLatitude(string2Double(in.readString()));
-            this.setDept(string2Double(in.readString()));
+            //this.setUrl(in.readString());
+            //this.setId(in.readString());
+            this.setLongitude((in.readDouble()));
+            this.setLatitude((in.readDouble()));
+            this.setDept((in.readDouble()));
         }
     }
 
-    private static String double2String(@Nullable final Double aDouble){
-        if (aDouble != null){
-            return String.valueOf(aDouble);
-        }
-        else {
-            return null;
-        }
-    }
-
-    private static Double string2Double(@Nullable final String string){
-        if (string != null){
-            try {
-                return Double.valueOf(string);
-            }catch (NumberFormatException e){
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
-    }
 
 
     /**
