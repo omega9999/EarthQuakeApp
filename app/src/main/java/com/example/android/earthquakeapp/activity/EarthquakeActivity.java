@@ -33,6 +33,7 @@ import com.example.android.earthquakeapp.loader.EarthquakeAdapter;
 import com.example.android.earthquakeapp.loader.EarthquakeLoader;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -74,7 +75,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         final Bundle bundle = new Bundle();
         bundle.putString(BASE_URL, BASE_USGS_REQUEST_URL);
 
-        if (checkConnection()){
+        if (checkConnection()) {
             // TODO deprecated
             Log.d(TAG, "LOADER initLoader()");
             getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, bundle, this);
@@ -87,9 +88,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         checkConnection();
     }
 
-    private boolean checkConnection(){
+    private boolean checkConnection() {
         boolean isConnected = isConnected(this);
-        if (!isConnected){
+        if (!isConnected) {
             this.mEmptyList.setText(getString(R.string.no_internet));
             this.mEmptyList.setVisibility(View.VISIBLE);
         } else {
@@ -120,12 +121,31 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.action_all_map:
+                Intent intent = new Intent(this, MapsActivity.class);
+                final ArrayList<Earthquake> list = new ArrayList<>(mAdapter.getEarthquakes());
+                intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES, list);
+                startActivity(intent);
+                return true;
+            case R.id.action_reload:
+                final Bundle bundle = new Bundle();
+                bundle.putString(BASE_URL, BASE_USGS_REQUEST_URL);
+
+                if (checkConnection()) {
+                    // TODO deprecated
+                    Log.d(TAG, "LOADER initLoader()");
+                    getLoaderManager().restartLoader(EARTHQUAKE_LOADER_ID, bundle, this);
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

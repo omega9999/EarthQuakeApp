@@ -48,6 +48,11 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             this.mMaxTime = list.getMaxTime();
         }
         super.addAll(collection);
+        this.mEarthquakes.addAll(collection);
+    }
+
+    public ArrayList<Earthquake> getEarthquakes() {
+        return mEarthquakes;
     }
 
     @NonNull
@@ -166,5 +171,6 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     private final SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     private final LayoutInflater mLayoutInflater;
 
+    private final ArrayList<Earthquake> mEarthquakes = new ArrayList<>();
 
 }
