@@ -53,7 +53,6 @@ public class JsonUtils {
             if (geometry != null) {
                 if ("Point".equals(geometry.getType())) {
                     if (geometry.getCoordinates() != null && geometry.getCoordinates().size() >= 3) {
-                        earthquake.setCoordinates(true);
                         earthquake.setLongitude(geometry.getCoordinates().get(0));
                         earthquake.setLatitude(geometry.getCoordinates().get(1));
                         earthquake.setDept(geometry.getCoordinates().get(2));

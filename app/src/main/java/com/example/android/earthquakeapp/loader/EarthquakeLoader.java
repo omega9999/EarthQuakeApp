@@ -53,33 +53,17 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
             if (TextUtils.isEmpty(this.mUrl)) {
                 return new ArrayList<>();
             }
-            this.checkLoad = false;
             final HttpConnection connection = new HttpConnection(this.mUrl);
-            final List<Earthquake> list = JsonUtils.convertFromJSON(getContext(), connection.makeHttpGetRequest());
-            this.checkLoad = true;
-            return list;
+            return JsonUtils.convertFromJSON(getContext(), connection.makeHttpGetRequest());
         } catch (Exception e) {
             Log.e(TAG, "Problem", e);
             return (new ErrorList<Earthquake>()).setException(e);
         }
     }
 
-    public boolean isCheckLoad(){
-        boolean res = this.checkLoad;
-        if (res){
-            this.checkLoad = false;
-        }
-        return res;
-    }
-
     public interface StartLoading {
         void startLoading();
     }
-
-
-
-    private boolean checkLoad = false;
-
 
     private final String mUrl;
     private final StartLoading mStartLoadingCallBack;

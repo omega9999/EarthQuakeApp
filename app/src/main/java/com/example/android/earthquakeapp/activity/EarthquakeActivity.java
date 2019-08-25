@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.bean.EarthquakeList;
@@ -146,8 +147,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
                 this.mEmptyList.setText(getString(R.string.no_earthquakes));
             }
         } else {
-            if (((EarthquakeLoader) loader).isCheckLoad()) {
+            if (Configurations.IS_LOADED) {
                 Toast.makeText(this, getString(R.string.number_of_earthquakes, earthquakes.size()), Toast.LENGTH_SHORT).show();
+                Configurations.IS_LOADED = false;
             }
             mAdapter.addAll(earthquakes);
         }

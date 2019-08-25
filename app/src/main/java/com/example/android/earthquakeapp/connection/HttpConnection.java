@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.android.earthquakeapp.Configurations;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +60,7 @@ public class HttpConnection {
             }
         }
         Log.d(TAG, "end of method makeHttpGetRequest");
+        Configurations.IS_LOADED = true;
         return jsonResponse;
     }
 

@@ -19,12 +19,14 @@ import androidx.core.content.ContextCompat;
 
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.activity.MapsActivity;
+import com.example.android.earthquakeapp.activity.UiUtils;
 import com.example.android.earthquakeapp.activity.WebActivity;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.bean.EarthquakeList;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
@@ -108,14 +110,19 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
                     Intent intent = null;
                     if (mapOpen != null) {
+                        final String label = Uri.encode(String.format("Earthquake of %1$s", UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude())));
                         if (mapOpen.equals(getContext().getString(R.string.settings_map_open_external_value))) {
-                            final String label = Uri.encode(String.format("Earthquake of %1$s", DECIMAL_FORMAT.format(earthquake.getMagnitude())));
+                            final int zoom = 3;
                             intent = new Intent(Intent.ACTION_VIEW);
                             //TODO bugfix: https://developers.google.com/maps/documentation/urls/android-intents
-                            intent.setData(Uri.parse(String.format("geo:%1$s, %2$s?z=3&q=(%3$s)@%1$s,%2$s", earthquake.getLatitude(), earthquake.getLongitude(), label)));
+                            final Uri uri = Uri.parse(String.format("geo:%1$s, %2$s?z=%4$s&q=(%3$s)@%1$s,%2$s", earthquake.getLatitude(), earthquake.getLongitude(), label, zoom));
+                            intent.setData(uri);
                         } else if (mapOpen.equals(getContext().getString(R.string.settings_map_open_internal_value))) {
                             //TODO implement activity MapsActivity
                             intent = new Intent(getContext(), MapsActivity.class);
+                            final ArrayList<Earthquake> list = new ArrayList<>();
+                            list.add(earthquake);
+                            intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES, list);
                         }
                     }
 
@@ -129,10 +136,10 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
 
             GradientDrawable magnitudeCircle = (GradientDrawable) magnitude.getBackground();
-            int magnitudeColor = getMagnitudeColor(earthquake.getMagnitude());
+            int magnitudeColor = ContextCompat.getColor(getContext(), earthquake.getMagnitudeColorIdRef());
             magnitudeCircle.setColor(magnitudeColor);
 
-            magnitude.setText(DECIMAL_FORMAT.format(earthquake.getMagnitude()));
+            magnitude.setText(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
             location.setText(earthquake.getPrimaryLocation());
             locationOffset.setText(earthquake.getLocationOffset());
             date.setText(mDateFormat.format(earthquake.getDate()));
@@ -146,55 +153,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         return 1;
     }
 
-    /**
-     * TODO make color scale absolute and relative scale (min/max) from preferences
-     *
-     * @param magnitude
-     * @return
-     */
-    private int getMagnitudeColor(final double magnitude) {
-        int magnitudeColorResourceId = R.color.magnitude1;
-        int magnitudeFloor = (int) Math.floor(magnitude);
-        if (magnitudeFloor < 0) {
-            magnitudeFloor = 0;
-        } else if (magnitudeFloor > 10) {
-            magnitudeFloor = 10;
-        }
-        switch (magnitudeFloor) {
-            case 0:
-            case 1:
-                magnitudeColorResourceId = R.color.magnitude1;
-                break;
-            case 2:
-                magnitudeColorResourceId = R.color.magnitude2;
-                break;
-            case 3:
-                magnitudeColorResourceId = R.color.magnitude3;
-                break;
-            case 4:
-                magnitudeColorResourceId = R.color.magnitude4;
-                break;
-            case 5:
-                magnitudeColorResourceId = R.color.magnitude5;
-                break;
-            case 6:
-                magnitudeColorResourceId = R.color.magnitude6;
-                break;
-            case 7:
-                magnitudeColorResourceId = R.color.magnitude7;
-                break;
-            case 8:
-                magnitudeColorResourceId = R.color.magnitude8;
-                break;
-            case 9:
-                magnitudeColorResourceId = R.color.magnitude9;
-                break;
-            case 10:
-                magnitudeColorResourceId = R.color.magnitude10plus;
-                break;
-        }
-        return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
-    }
+
 
 
     private Earthquake mMinMagnitude = null;
@@ -207,5 +166,5 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     private final SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     private final LayoutInflater mLayoutInflater;
 
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
+
 }

@@ -1,17 +1,105 @@
 package com.example.android.earthquakeapp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.Nullable;
+
+import com.example.android.earthquakeapp.activity.UiUtils;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 
-public class Earthquake {
+public class Earthquake implements Parcelable {
 
     public Earthquake() {
     }
 
-    public double getMagnitude() {
+    public static final Creator<Earthquake> CREATOR = new Creator<Earthquake>() {
+        @Override
+        public Earthquake createFromParcel(Parcel in) {
+            return new Earthquake(in);
+        }
+
+        @Override
+        public Earthquake[] newArray(int size) {
+            return new Earthquake[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return Parcelable.CONTENTS_FILE_DESCRIPTOR;
+    }
+
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(double2String(mMagnitude));
+        dest.writeString(mPrimaryLocation);
+        dest.writeString(mLocationOffset);
+        dest.writeLong(mDate.getTime());
+        dest.writeString(mUrl);
+        dest.writeString(mId);
+        dest.writeString(double2String(mLongitude));
+        dest.writeString(double2String(mLatitude));
+        dest.writeString(double2String(mDept));
+    }
+
+    public Earthquake(Parcel in) {
+        this();
+        if (in != null) {
+            this.setMagnitude(string2Double(in.readString()));
+            this.setPrimaryLocation(in.readString());
+            this.setLocationOffset(in.readString());
+            this.setDate(new Date(in.readLong()));
+            this.setUrl(in.readString());
+            this.setId(in.readString());
+            this.setLongitude(string2Double(in.readString()));
+            this.setLatitude(string2Double(in.readString()));
+            this.setDept(string2Double(in.readString()));
+        }
+    }
+
+    private static String double2String(@Nullable final Double aDouble){
+        if (aDouble != null){
+            return String.valueOf(aDouble);
+        }
+        else {
+            return null;
+        }
+    }
+
+    private static Double string2Double(@Nullable final String string){
+        if (string != null){
+            try {
+                return Double.valueOf(string);
+            }catch (NumberFormatException e){
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    /**
+     * TODO make color scale absolute and relative scale (min/max) from preferences
+     * @return
+     */
+    public int getMagnitudeColorIdRef() {
+        return UiUtils.getMagnitudeColorIdRef(this.mMagnitude);
+    }
+
+
+    public Double getMagnitude() {
         return mMagnitude;
     }
 
-    public Earthquake setMagnitude(double magnitude) {
+    public Earthquake setMagnitude(Double magnitude) {
         this.mMagnitude = magnitude;
         return this;
     }
@@ -61,40 +149,45 @@ public class Earthquake {
         return this;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return mLongitude;
     }
 
-    public Earthquake setLongitude(double longitude) {
+    public Earthquake setLongitude(Double longitude) {
         this.mLongitude = longitude;
         return this;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return mLatitude;
     }
 
-    public Earthquake setLatitude(double latitude) {
+    public Earthquake setLatitude(Double latitude) {
         this.mLatitude = latitude;
         return this;
     }
 
-    public double getDept() {
+    public Double getDept() {
         return mDept;
     }
 
-    public Earthquake setDept(double dept) {
+    public Earthquake setDept(Double dept) {
         this.mDept = dept;
         return this;
     }
 
     public boolean isCoordinates() {
-        return mCoordinates;
+        return getLatitude() != null && getLongitude() != null;
     }
 
-    public Earthquake setCoordinates(boolean hasCoordinates) {
-        this.mCoordinates = hasCoordinates;
-        return this;
+    @CheckResult
+    @Nullable
+    public LatLng getLatLng(){
+        LatLng latLng = null;
+        if (isCoordinates()){
+            latLng = new LatLng(getLatitude(), getLongitude());
+        }
+        return latLng;
     }
 
     @Override
@@ -111,14 +204,15 @@ public class Earthquake {
         return mId.hashCode();
     }
 
-    private boolean mCoordinates = false;
-    private double mMagnitude;
+    private Double mMagnitude;
     private String mPrimaryLocation;
     private String mLocationOffset;
     private Date mDate;
     private String mUrl;
     private String mId;
-    private double mLongitude;
-    private double mLatitude;
-    private double mDept;
+    private Double mLongitude;
+    private Double mLatitude;
+    private Double mDept;
+
+
 }

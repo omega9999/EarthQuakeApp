@@ -1,13 +1,23 @@
 package com.example.android.earthquakeapp.bean;
 
 import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Function;
 
 public class EarthquakeList extends ArrayList<Earthquake> {
+
+    @Override
+    public boolean addAll(@NonNull final Collection<? extends Earthquake> collection) {
+        for (Earthquake earthquake : collection) {
+            this.add(earthquake);
+        }
+        return true;
+    }
 
     @Override
     public boolean add(@Nullable final Earthquake earthquake) {
@@ -49,7 +59,6 @@ public class EarthquakeList extends ArrayList<Earthquake> {
     public Earthquake getMaxTime() {
         return mMaxTime;
     }
-
 
 
     private Earthquake mMinMagnitude = null;
