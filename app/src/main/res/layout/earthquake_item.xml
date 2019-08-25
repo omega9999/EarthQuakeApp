@@ -14,6 +14,10 @@
         android:id="@+id/magnitude"
         style="@style/IconListStyle"
         android:background="@drawable/magnitude_circle"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="6"
         tools:targetApi="jelly_bean"
         tools:text="8.9" />
 
