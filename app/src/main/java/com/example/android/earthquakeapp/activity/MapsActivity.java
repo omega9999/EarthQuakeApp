@@ -1,12 +1,11 @@
 package com.example.android.earthquakeapp.activity;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.android.earthquakeapp.R;
@@ -70,14 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
 
-
-                GradientDrawable magnitudeCircle = (GradientDrawable) getDrawable(R.drawable.magnitude_circle);
-                int magnitudeColor = ContextCompat.getColor(this, earthquake.getMagnitudeColorIdRef());
-                magnitudeCircle.setColor(magnitudeColor);
-
-
-                Bitmap bitmap = UiUtils.drawableToBitmap(magnitudeCircle);
-                //Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
+                Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
                 final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
                 options.icon(icon);
                 options.title(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
