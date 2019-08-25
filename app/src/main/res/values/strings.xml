@@ -40,4 +40,5 @@
     <string name="settings_map_open_internal_label">In app</string>
     <string name="title_activity_maps">Map</string>
     <string name="number_of_earthquakes">Found %1$d earthquakes</string>
+    <string name="map_max_capacity">Reached maximum number of earthquakes (%2$d) displayed on the map: %1$d</string>
 </resources>

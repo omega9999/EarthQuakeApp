@@ -118,7 +118,7 @@ public class HttpConnection {
 
     private final URL mUrl;
 
-    private static final int TIMEOUT = 60 * 1000;
+    private static final int TIMEOUT = 2 * 60 * 1000;
 
     private static final String TAG = HttpConnection.class.getSimpleName();
 }

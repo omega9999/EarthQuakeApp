@@ -2,6 +2,7 @@ package com.example.android.earthquakeapp.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,10 +34,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        Log.d(TAG,"onCreate");
+
         final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            NavUtils.navigateUpFromSameTask(MapsActivity.this);
-        });
+        fab.setOnClickListener(v -> NavUtils.navigateUpFromSameTask(MapsActivity.this));
 
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -51,6 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+
+        Log.d(TAG,"list received");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -85,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             latMax = mEarthquakes.get(0).getLatitude();
             lonMax = mEarthquakes.get(0).getLongitude();
 
+            Log.d(TAG,"start list decoding");
             for (Earthquake earthquake : mEarthquakes){
                 final MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
@@ -100,6 +104,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 latMax = Math.max(latMax,earthquake.getLatitude());
                 lonMax = Math.max(lonMax,earthquake.getLongitude());
             }
+
+            Log.d(TAG,"end list decoding");
 
             double delta = Math.max(Math.abs(latMax - latMin), Math.abs(lonMax - lonMin));
             if (delta >= 0 && delta < 3){

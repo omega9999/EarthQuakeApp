@@ -129,23 +129,15 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             case R.id.action_all_map:
                 final Intent intent = new Intent(this, MapsActivity.class);
                 final ArrayList<Earthquake> list = new ArrayList<>(mAdapter.getEarthquakes());
-                ArrayList<Earthquake> tmp = new ArrayList<>();
-                int index = 0;
-                int suffix = 0;
-                for(Earthquake quake : list){
-                    tmp.add(quake);
-                    index++;
-                    if (index > 100){
-                        intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES+suffix, tmp);
-                        suffix++;
-                        index = 0;
-                        tmp = new ArrayList<>();
-                    }
+                final int maxCapacity = 3000;
+                final ArrayList<Earthquake> tmp = new ArrayList<>(list.subList(0, Math.min(list.size(), maxCapacity)));
+                if (list.size() > maxCapacity) {
+                    Toast.makeText(this, getString(R.string.map_max_capacity, list.size(), maxCapacity), Toast.LENGTH_SHORT).show();
                 }
-                if (!tmp.isEmpty()){
-                    intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES+suffix, tmp);
-                }
+                Log.d(TAG,"insert earthquakes into intent");
+                intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES, tmp);
                 // https://developer.android.com/reference/android/os/TransactionTooLargeException.html
+                Log.d(TAG,"start activity MapsActivity");
                 startActivity(intent);
                 return true;
             case R.id.action_reload:
