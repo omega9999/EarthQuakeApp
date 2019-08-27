@@ -52,6 +52,7 @@ TODO:
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
 2) usare le https://developer.android.com/guide/topics/ui/layout/recyclerview.html
 OK 3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonschema2pojo.org/)
+3.1) usare moshi al posto di Gson (occupa meno spazio ed è integrabile con retrofit)
 4) shrink code: https://developer.android.com/studio/build/shrink-code
 5) provare la classe OkHttpClient https://github.com/square/okhttp
 6) provare la classe Retrofit https://square.github.io/retrofit/

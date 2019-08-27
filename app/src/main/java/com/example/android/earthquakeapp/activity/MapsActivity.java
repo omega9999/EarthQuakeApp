@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.bean.EarthquakeList;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -53,6 +56,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
+        mEarthquakes.addAll(Configurations.EARTHQUAKES);
+
+
         Log.d(TAG,"list received");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -74,7 +80,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(@NonNull final GoogleMap googleMap) {
-        mMap = googleMap;
 
         LatLng centerCoords = new LatLng(0, 0);
         double latMin;
@@ -93,11 +98,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
 
-                Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
-                final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
-                options.icon(icon);
+                final String key = getKeyMarker(earthquake);
+                if (!mMapMarker.containsKey(key)){
+                    Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
+                    final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+                    mMapMarker.put(key, icon);
+                }
+
+                options.icon(mMapMarker.get(key));
                 options.title(getTitle(earthquake));
-                mMap.addMarker(options);
+                googleMap.addMarker(options);
 
                 latMin = Math.min(latMin,earthquake.getLatitude());
                 lonMin = Math.min(lonMin,earthquake.getLongitude());
@@ -105,9 +115,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lonMax = Math.max(lonMax,earthquake.getLongitude());
             }
 
+            Log.d(TAG,String.format("Number of earthquake %1$s, number of different marks %2$s",mEarthquakes.size(), mMapMarker.keySet().size()));
+
             Log.d(TAG,"end list decoding");
 
             double delta = Math.max(Math.abs(latMax - latMin), Math.abs(lonMax - lonMin));
+            Log.d(TAG, String.format("Delta between min/max %1$s",delta));
+            //TODO decidere meglio lo zoom (lo zoom è un float)
             if (delta >= 0 && delta < 3){
                 zoom = 4;
             }
@@ -118,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             centerCoords = new LatLng((latMax + latMin) / 2, (lonMax + lonMin) / 2);
 
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerCoords,zoom));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerCoords,zoom));
     }
 
     private String getTitle(Earthquake earthquake){
@@ -129,9 +143,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return builder.toString();
     }
 
+    private String getKeyMarker(@NonNull final Earthquake earthquake){
+        return String.format("%1$s_%2$s", earthquake.getMagnitudeColorIdRef(),UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
+    }
 
-
-    private GoogleMap mMap;
+    private Map<String,BitmapDescriptor> mMapMarker = new HashMap<>();
 
     private final EarthquakeList mEarthquakes = new EarthquakeList();
 
