@@ -2,6 +2,8 @@ package com.example.android.earthquakeapp.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.bean.EarthquakeList;
 import com.example.android.earthquakeapp.bean.MagnitudeDrawable;
+import com.example.android.earthquakeapp.provider.db.DbUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        Log.d(TAG,"onCreate");
+        Log.d(TAG, "onCreate");
 
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> NavUtils.navigateUpFromSameTask(MapsActivity.this));
@@ -45,8 +48,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                for (String key : bundle.keySet()){
-                    if (key.startsWith(EARTHQUAKES)){
+                for (String key : bundle.keySet()) {
+                    if (key.startsWith(EARTHQUAKES)) {
                         final ArrayList<Earthquake> list = bundle.getParcelableArrayList(key);
                         if (list != null) {
                             mEarthquakes.addAll(list);
@@ -56,10 +59,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-        mEarthquakes.addAll(Configurations.EARTHQUAKES);
+        new Handler(new HandlerThread(TAG + ".Thread").getLooper()).post(() -> mEarthquakes.addAll(DbUtils.getEarthquakeSync(this)));
 
 
-        Log.d(TAG,"list received");
+        Log.d(TAG, "list received");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -87,19 +90,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latMax;
         double lonMax;
         int zoom = 4;
-        if (mEarthquakes.size() > 0){
+        if (mEarthquakes.size() > 0) {
             latMin = mEarthquakes.get(0).getLatitude();
             lonMin = mEarthquakes.get(0).getLongitude();
             latMax = mEarthquakes.get(0).getLatitude();
             lonMax = mEarthquakes.get(0).getLongitude();
 
-            Log.d(TAG,"start list decoding");
-            for (Earthquake earthquake : mEarthquakes){
+            Log.d(TAG, "start list decoding");
+            for (Earthquake earthquake : mEarthquakes) {
                 final MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
 
                 final String key = getKeyMarker(earthquake);
-                if (!mMapMarker.containsKey(key)){
+                if (!mMapMarker.containsKey(key)) {
                     Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
                     final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
                     mMapMarker.put(key, icon);
@@ -109,33 +112,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 options.title(getTitle(earthquake));
                 googleMap.addMarker(options);
 
-                latMin = Math.min(latMin,earthquake.getLatitude());
-                lonMin = Math.min(lonMin,earthquake.getLongitude());
-                latMax = Math.max(latMax,earthquake.getLatitude());
-                lonMax = Math.max(lonMax,earthquake.getLongitude());
+                latMin = Math.min(latMin, earthquake.getLatitude());
+                lonMin = Math.min(lonMin, earthquake.getLongitude());
+                latMax = Math.max(latMax, earthquake.getLatitude());
+                lonMax = Math.max(lonMax, earthquake.getLongitude());
             }
 
-            Log.d(TAG,String.format("Number of earthquake %1$s, number of different marks %2$s",mEarthquakes.size(), mMapMarker.keySet().size()));
+            Log.d(TAG, String.format("Number of earthquake %1$s, number of different marks %2$s", mEarthquakes.size(), mMapMarker.keySet().size()));
 
-            Log.d(TAG,"end list decoding");
+            Log.d(TAG, "end list decoding");
 
             double delta = Math.max(Math.abs(latMax - latMin), Math.abs(lonMax - lonMin));
-            Log.d(TAG, String.format("Delta between min/max %1$s",delta));
+            Log.d(TAG, String.format("Delta between min/max %1$s", delta));
             //TODO decidere meglio lo zoom (lo zoom è un float)
-            if (delta >= 0 && delta < 3){
+            if (delta >= 0 && delta < 3) {
                 zoom = 4;
-            }
-            else{
+            } else {
                 zoom = 1;
             }
 
             centerCoords = new LatLng((latMax + latMin) / 2, (lonMax + lonMin) / 2);
 
         }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerCoords,zoom));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerCoords, zoom));
     }
 
-    private String getTitle(Earthquake earthquake){
+    private String getTitle(Earthquake earthquake) {
         final StringBuilder builder = new StringBuilder();
         builder.append("M ").append(UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
         builder.append(" - ").append(UiUtils.DATE_FORMAT.format(earthquake.getDate()));
@@ -143,11 +145,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return builder.toString();
     }
 
-    private String getKeyMarker(@NonNull final Earthquake earthquake){
-        return String.format("%1$s_%2$s", earthquake.getMagnitudeColorIdRef(),UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
+    private String getKeyMarker(@NonNull final Earthquake earthquake) {
+        return String.format("%1$s_%2$s", earthquake.getMagnitudeColorIdRef(), UiUtils.DECIMAL_FORMAT.format(earthquake.getMagnitude()));
     }
 
-    private Map<String,BitmapDescriptor> mMapMarker = new HashMap<>();
+    private Map<String, BitmapDescriptor> mMapMarker = new HashMap<>();
 
     private final EarthquakeList mEarthquakes = new EarthquakeList();
 

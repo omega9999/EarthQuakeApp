@@ -1,9 +1,12 @@
 package com.example.android.earthquakeapp.bean;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.android.earthquakeapp.activity.UiUtils;
@@ -32,7 +35,6 @@ public class Earthquake implements Parcelable {
     public int describeContents() {
         return Parcelable.CONTENTS_FILE_DESCRIPTOR;
     }
-
 
 
     @Override
@@ -64,9 +66,9 @@ public class Earthquake implements Parcelable {
     }
 
 
-
     /**
      * TODO make color scale absolute and relative scale (min/max) from preferences
+     *
      * @return
      */
     public int getMagnitudeColorIdRef() {
@@ -161,9 +163,9 @@ public class Earthquake implements Parcelable {
 
     @CheckResult
     @Nullable
-    public LatLng getLatLng(){
+    public LatLng getLatLng() {
         LatLng latLng = null;
-        if (isCoordinates()){
+        if (isCoordinates()) {
             latLng = new LatLng(getLatitude(), getLongitude());
         }
         return latLng;

@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.geojson;
+package com.example.android.earthquakeapp.provider.geojson;
 
 import android.content.Context;
 import android.text.TextUtils;

@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.connection;
+package com.example.android.earthquakeapp.provider.connection;
 
 import android.util.Log;
 
@@ -39,6 +39,7 @@ public class HttpConnection {
 
         HttpURLConnection urlConnection = null;
         try {
+            Log.d(TAG, "Open connection with " + this.mUrl);
             urlConnection = (HttpURLConnection) this.mUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setReadTimeout(TIMEOUT);

@@ -8,6 +8,5 @@ public class Configurations {
 
     public static boolean IS_LOADED = false;
 
-    public static ArrayList<Earthquake> EARTHQUAKES = new ArrayList<>();
 
 }
