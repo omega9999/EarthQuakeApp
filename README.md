@@ -49,6 +49,7 @@ Casi risolti:
     
 
 TODO:
+0) https://alexzh.com/2015/06/26/support-multiple-themes-in-android-application/
 1) sostituire i vari layout con le ConstraintLayout (vedere https://github.com/chrisbanes/cheesesquare)
 2) usare le https://developer.android.com/guide/topics/ui/layout/recyclerview.html
 OK 3) leggere il JSON usando la classe Gson di google (vedere http://www.jsonschema2pojo.org/)
