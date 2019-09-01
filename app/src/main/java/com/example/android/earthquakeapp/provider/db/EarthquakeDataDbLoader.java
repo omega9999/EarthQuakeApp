@@ -22,11 +22,11 @@ public class EarthquakeDataDbLoader {
     }
 
     public String status() {
-        return "Is alive? " + thread.isAlive();
+        return "Is alive? " + threadMain.isAlive();
     }
 
     public void loadData(@NonNull Context context, @Nullable EarthquakeCallback callback) {
-        final Handler handler = new Handler(thread.getLooper());
+        final Handler handler = new Handler(threadMain.getLooper());
         handler.post(() -> loadDataInner(context, callback));
     }
 
@@ -65,11 +65,7 @@ public class EarthquakeDataDbLoader {
                         for (Earthquake quake : list) {
                             quake.setUrlRequest(url);
                         }
-                        Log.d(TAG, "save list on db " + list.size());
-                        DbUtils.addEarthquake(context, list);
-                        if (callback != null) {
-                            callback.notifyNewData();
-                        }
+                        insert(context, list, callback);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Problem", e);
@@ -92,9 +88,26 @@ public class EarthquakeDataDbLoader {
         }
     }
 
+    private void insert(@NonNull final Context context, @NonNull final List<Earthquake> list,  @Nullable final EarthquakeCallback callback){
+        final Handler handler = new Handler(threadMain.getLooper());
+        handler.post(() -> {
+            Log.d(TAG, "start save list on db " + list.size());
+            DbUtils.addEarthquake(context, list);
+            Log.d(TAG, "end save list on db " + list.size());
+            if (callback != null) {
+                Log.d(TAG, "notify New Data");
+                callback.notifyNewData();
+            }
+            else{
+                Log.e(TAG, "callback NULL!!!");
+            }
+        });
+    }
+
     @Override
     protected void finalize() throws Throwable {
-        thread.quit();
+        threadMain.quit();
+        threadInsert.quit();
         for (HandlerThread handlerThread : THREADS) {
             if (handlerThread != null && handlerThread.isAlive()) {
                 handlerThread.quit();
@@ -105,8 +118,10 @@ public class EarthquakeDataDbLoader {
 
 
     private EarthquakeDataDbLoader() {
-        thread = new HandlerThread(TAG + ".Thread_Main");
-        thread.start();
+        threadMain = new HandlerThread(TAG + ".Thread_Main");
+        threadMain.start();
+        threadInsert = new HandlerThread(TAG + ".Thread_Insert");
+        threadInsert.start();
         for (int index = 0; index < THREADS.length; index++) {
             THREADS[index] = new HandlerThread(TAG + ".Thread_" + index);
             THREADS[index].start();
@@ -114,8 +129,9 @@ public class EarthquakeDataDbLoader {
         }
     }
 
-    private final HandlerThread thread;
-    private static final int MAX_THREAD = 10;
+    private final HandlerThread threadMain;
+    private final HandlerThread threadInsert;
+    private static final int MAX_THREAD = 4;
     private static final HandlerThread[] THREADS = new HandlerThread[MAX_THREAD];
     private static final EarthquakeDataDbLoader ourInstance = new EarthquakeDataDbLoader();
 

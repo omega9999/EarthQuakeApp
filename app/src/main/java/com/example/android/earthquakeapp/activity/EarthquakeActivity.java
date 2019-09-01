@@ -159,9 +159,14 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void notifyNewData() {
         runOnUiThread(() -> {
-            Loader loader = getLoaderManager().getLoader(EARTHQUAKE_LOADER_ID);
-            if (loader != null) {
+            final Loader loader = getLoaderManager().getLoader(EARTHQUAKE_LOADER_ID);
+            if (loader != null && loader.isStarted()) {
+                Log.w(TAG,"forceLoad");
                 loader.forceLoad();
+            }
+            else{
+                Log.e(TAG,"loader not initiated?");
+                getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
             }
         });
     }
