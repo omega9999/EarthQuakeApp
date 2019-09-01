@@ -1,12 +1,9 @@
 package com.example.android.earthquakeapp.bean;
 
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.CheckResult;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.android.earthquakeapp.activity.UiUtils;
@@ -43,8 +40,8 @@ public class Earthquake implements Parcelable {
         dest.writeString(mPrimaryLocation);
         dest.writeString(mLocationOffset);
         dest.writeLong(mDate.getTime());
-        //dest.writeString(mUrl);
-        //dest.writeString(mId);
+        dest.writeString(mUrl);
+        dest.writeString(mId);
         dest.writeDouble((mLongitude));
         dest.writeDouble((mLatitude));
         dest.writeDouble((mDept));
@@ -57,8 +54,8 @@ public class Earthquake implements Parcelable {
             this.setPrimaryLocation(in.readString());
             this.setLocationOffset(in.readString());
             this.setDate(new Date(in.readLong()));
-            //this.setUrl(in.readString());
-            //this.setId(in.readString());
+            this.setUrl(in.readString());
+            this.setId(in.readString());
             this.setLongitude((in.readDouble()));
             this.setLatitude((in.readDouble()));
             this.setDept((in.readDouble()));

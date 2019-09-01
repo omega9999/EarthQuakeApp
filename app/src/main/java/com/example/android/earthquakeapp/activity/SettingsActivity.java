@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -65,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 preference.setSummary(stringValue);
             }
+            Configurations.SETTINGS_CHANGED = true;
             return true;
         }
 

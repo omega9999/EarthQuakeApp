@@ -139,6 +139,7 @@ public class EarthquakeAdapter extends CursorAdapter {
                         } else if (mapOpen.equals(context.getString(R.string.settings_map_open_internal_value))) {
                             //TODO implement activity MapsActivity
                             intent = new Intent(context, MapsActivity.class);
+                            intent.setData(MapsActivity.FROM_LIST);
                             final ArrayList<Earthquake> list = new ArrayList<>();
                             list.add(earthquake);
                             intent.putParcelableArrayListExtra(MapsActivity.EARTHQUAKES, list);

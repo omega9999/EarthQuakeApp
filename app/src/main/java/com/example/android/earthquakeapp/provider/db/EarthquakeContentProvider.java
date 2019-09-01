@@ -17,7 +17,7 @@ import com.example.android.earthquakeapp.provider.exception.IllegalUriException;
 
 public class EarthquakeContentProvider extends ContentProvider {
     public EarthquakeContentProvider() {
-        Log.wtf(TAG,"EarthquakeContentProvider constructor");
+        Log.d(TAG,"EarthquakeContentProvider constructor");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.android.earthquakeapp.activity;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -34,6 +35,8 @@ import java.util.Map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final String EARTHQUAKES = MapsActivity.class.getPackage() + ".EARTHQUAKES";
+    public static final Uri FROM_DB = Uri.parse("origin://db");
+    public static final Uri FROM_LIST = Uri.parse("origin://list");
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -58,6 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+
+        //TODO intent.setData(Uri.parse("origin://db"));
+        //TODO intent.setData(Uri.parse("origin://list"));
 
         new Handler(new HandlerThread(TAG + ".Thread").getLooper()).post(() -> mEarthquakes.addAll(DbUtils.getEarthquakeSync(this)));
 

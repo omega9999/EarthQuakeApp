@@ -1,9 +1,14 @@
 package com.example.android.earthquakeapp.activity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import androidx.annotation.NonNull;
 
 import com.example.android.earthquakeapp.R;
 
@@ -16,6 +21,13 @@ public class UiUtils {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
     public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss", Locale.ITALIAN);
+
+    public static boolean isConnected(@NonNull final Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
 
 
     public static int getMagnitudeColorIdRef(final double magnitude) {
