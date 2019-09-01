@@ -39,7 +39,8 @@
     <string name="settings_map_open_external_label">System default</string>
     <string name="settings_map_open_internal_label">In app</string>
     <string name="title_activity_maps">Map</string>
-    <string name="number_of_earthquakes">Found %1$d earthquakes</string>
+    <string name="number_of_earthquakes">Found total%1$d earthquakes</string>
+    <string name="number_of_earthquakes_added">Added %1$d earthquakes (Job: %2$d / %3$d)</string>
     <string name="map_max_capacity">Reached maximum number of earthquakes (%2$d) displayed on the map: %1$d</string>
     <string name="info_quake">Info quake: id %1$s, url request %2$s</string>
 </resources>

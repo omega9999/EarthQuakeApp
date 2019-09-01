@@ -157,12 +157,13 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
 
     @Override
-    public void notifyNewData() {
+    public void notifyNewData(final int earthquakeAdded, int numJobCompleted, int numJobTotal) {
         runOnUiThread(() -> {
             final Loader loader = getLoaderManager().getLoader(EARTHQUAKE_LOADER_ID);
             if (loader != null && loader.isStarted()) {
                 Log.w(TAG,"forceLoad");
                 loader.forceLoad();
+                Toast.makeText(this, getString(R.string.number_of_earthquakes_added, earthquakeAdded, numJobCompleted, numJobTotal), Toast.LENGTH_SHORT).show();
             }
             else{
                 Log.e(TAG,"loader not initiated?");
@@ -173,8 +174,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void notifyEarthquakeFinalCount(int numEarthquake) {
-        Log.w(TAG, getString(R.string.number_of_earthquakes, numEarthquake));
-        runOnUiThread(() -> Toast.makeText(this, getString(R.string.number_of_earthquakes, numEarthquake), Toast.LENGTH_SHORT).show());
+        final String str = getString(R.string.number_of_earthquakes, numEarthquake);
+        Log.w(TAG, str);
+        runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
     }
 
 

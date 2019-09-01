@@ -65,41 +65,44 @@ public class EarthquakeDataDbLoader {
                         for (Earthquake quake : list) {
                             quake.setUrlRequest(url);
                         }
-                        insert(context, list, callback);
+                        final ManageInsert manage = new ManageInsert(list, callback, connectionEnded, indexFinal);
+                        insert(context, manage);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Problem", e);
                 }
-                if (callback != null) {
-                    connectionEnded[indexFinal] = true;
-                    synchronized (connectionEnded) {
-                        boolean res = true;
-                        for (boolean b : connectionEnded) {
-                            res &= b;
-                        }
-                        if (res) {
-                            // ALL works finished
-                            final int count = DbUtils.getCountEarthquake(context);
-                            callback.notifyEarthquakeFinalCount(count);
-                        }
-                    }
-                }
+
             });
         }
     }
 
-    private void insert(@NonNull final Context context, @NonNull final List<Earthquake> list,  @Nullable final EarthquakeCallback callback){
+    private void insert(@NonNull final Context context, @NonNull final ManageInsert manage){
         final Handler handler = new Handler(threadMain.getLooper());
         handler.post(() -> {
-            Log.d(TAG, "start save list on db " + list.size());
-            DbUtils.addEarthquake(context, list);
-            Log.d(TAG, "end save list on db " + list.size());
-            if (callback != null) {
-                Log.d(TAG, "notify New Data");
-                callback.notifyNewData();
+            Log.d(TAG, "start save list on db " + manage.list.size());
+            DbUtils.addEarthquake(context, manage.list);
+            Log.d(TAG, "end save list on db " + manage.list.size());
+            if (manage.callback != null) {
             }
-            else{
-                Log.e(TAG, "callback NULL!!!");
+            if (manage.callback != null) {
+                Log.d(TAG, "notify New Data");
+                synchronized (manage.connectionEnded) {
+                    manage.connectionEnded[manage.index] = true;
+                    boolean res = true;
+                    int count = 0;
+                    for (boolean b : manage.connectionEnded) {
+                        res &= b;
+                        if (b){
+                            count++;
+                        }
+                    }
+                    manage.callback.notifyNewData(manage.list.size(), count, manage.connectionEnded.length);
+                    if (res) {
+                        // ALL works finished
+                        final int finalCount = DbUtils.getCountEarthquake(context);
+                        manage.callback.notifyEarthquakeFinalCount(finalCount);
+                    }
+                }
             }
         });
     }
@@ -129,9 +132,23 @@ public class EarthquakeDataDbLoader {
         }
     }
 
+    private class ManageInsert{
+        ManageInsert(List<Earthquake> list, EarthquakeCallback callback, boolean[] connectionEnded, int index) {
+            this.list = list;
+            this.callback = callback;
+            this.connectionEnded = connectionEnded;
+            this.index = index;
+        }
+
+        final List<Earthquake> list;
+        final EarthquakeCallback callback;
+        final boolean[] connectionEnded;
+        final int index;
+    }
+
     private final HandlerThread threadMain;
     private final HandlerThread threadInsert;
-    private static final int MAX_THREAD = 4;
+    private static final int MAX_THREAD = 5;
     private static final HandlerThread[] THREADS = new HandlerThread[MAX_THREAD];
     private static final EarthquakeDataDbLoader ourInstance = new EarthquakeDataDbLoader();
 

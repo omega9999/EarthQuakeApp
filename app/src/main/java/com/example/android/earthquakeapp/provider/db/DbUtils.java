@@ -41,16 +41,14 @@ public class DbUtils {
         final int startTimeLimit = Integer.valueOf(sharedPrefs.getString(context.getString(R.string.settings_start_time_limit_key), context.getString(R.string.settings_start_time_limit_default)));
         final Uri baseUri = Uri.parse(BASE_USGS_REQUEST_URL);
 
-        final Calendar calendar = GregorianCalendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -1 * startTimeLimit);
-        final long startTimeTarget = calendar.getTime().getTime();
+        CALENDAR.setTime(new Date());
+        CALENDAR.add(Calendar.DAY_OF_YEAR, -1 * startTimeLimit);
+        final long startTimeTarget = CALENDAR.getTimeInMillis();
         //DATE_FORMAT.format(calendar.getTime());
 
         final Date endTimeDate = new Date();
         long endTime = endTimeDate.getTime();
-        calendar.setTime(endTimeDate);
-        calendar.add(Calendar.MONTH, -1);
-        long startTime = Math.max(calendar.getTimeInMillis(),startTimeTarget);
+        long startTime = getStartTime(endTime, startTimeTarget);
 
         ArrayList<String> urls = new ArrayList<>();
 
@@ -74,12 +72,16 @@ public class DbUtils {
             endTime = calendar.getTimeInMillis();
             */
             endTime = startTime;
-            calendar.setTime(new Date(startTime));
-            calendar.add(Calendar.MONTH, -1);
-            startTime = Math.max(calendar.getTimeInMillis(),startTimeTarget);
+            startTime = getStartTime(endTime, startTimeTarget);
 
         }
         return urls.toArray(new String[0]);
+    }
+
+    private static long getStartTime(final long endTime, final long lowerbound){
+        CALENDAR.setTimeInMillis(endTime);
+        CALENDAR.add(Calendar.DAY_OF_YEAR, -15);
+        return Math.max(CALENDAR.getTimeInMillis(),lowerbound);
     }
 
     private static String long2DateString(SimpleDateFormat DATE_FORMAT, final long time){
@@ -196,6 +198,7 @@ public class DbUtils {
             EarthquakeEntry.URL_REQUEST
     };
 
+    private static final Calendar CALENDAR = GregorianCalendar.getInstance();
     private static final int MAX_SET = 50;
     private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
