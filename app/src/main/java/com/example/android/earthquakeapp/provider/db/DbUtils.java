@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 public class DbUtils {
@@ -31,7 +32,8 @@ public class DbUtils {
     @Nullable
     @CheckResult
     static String[] getQueryUrl(@NonNull final Context context) {
-
+        final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault());
+        DATE_FORMAT.setTimeZone(TimeZone.getDefault()); // getTimeZone("GMT"));
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String minMagnitude = sharedPrefs.getString(context.getString(R.string.settings_min_magnitude_key), context.getString(R.string.settings_min_magnitude_default));
         final String orderBy = sharedPrefs.getString(context.getString(R.string.settings_order_by_key), context.getString(R.string.settings_order_by_default));
@@ -62,8 +64,8 @@ public class DbUtils {
             uriBuilder.appendQueryParameter("minmag", minMagnitude);
             uriBuilder.appendQueryParameter("orderby", orderBy);
             //uriBuilder.appendQueryParameter("offset", String.valueOf(index + 1));
-            uriBuilder.appendQueryParameter("endtime", long2DateString(endTime)); // default present
-            uriBuilder.appendQueryParameter("starttime", long2DateString(startTime)); // default now - 30 days
+            uriBuilder.appendQueryParameter("endtime", long2DateString(DATE_FORMAT, endTime)); // default present
+            uriBuilder.appendQueryParameter("starttime", long2DateString(DATE_FORMAT, startTime)); // default now - 30 days
             urls.add(uriBuilder.toString());
 
             /*
@@ -80,7 +82,7 @@ public class DbUtils {
         return urls.toArray(new String[0]);
     }
 
-    private static String long2DateString(final long time){
+    private static String long2DateString(SimpleDateFormat DATE_FORMAT, final long time){
         return DATE_FORMAT.format(new Date(time).getTime());
     }
 
@@ -195,7 +197,7 @@ public class DbUtils {
     };
 
     private static final int MAX_SET = 50;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
     private static final String BASE_USGS_COUNT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/count";
 
