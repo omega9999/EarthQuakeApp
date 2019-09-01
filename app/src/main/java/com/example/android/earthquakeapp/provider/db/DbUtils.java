@@ -84,18 +84,13 @@ public class DbUtils {
         return res;
     }
 
-    public static List<Earthquake> getEarthquakeSync(@NonNull final Context context){
+    public static EarthquakeCursor getEarthquakeSync(@NonNull final Context context){
         final String selection = null;
         final String[] selectionArgs = null;
         final String orderBy = null;
 
-        List<Earthquake> earthquakes = new ArrayList<>();
-        EarthquakeCursor cursor = (EarthquakeCursor) context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy );
-        while(cursor.moveToNext()){
-            earthquakes.add(cursor2Earthquake(cursor));
-        }
-        cursor.close();
-        return earthquakes;
+        Cursor cursor = context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy );
+        return new EarthquakeCursor(cursor);
     }
 
     public static CursorLoader getEarthquake(@NonNull final Context context) {
@@ -103,8 +98,7 @@ public class DbUtils {
         final String[] selectionArgs = null;
         final String orderBy = null;
 
-        //FIXME togliere la riga Looper.prepare()
-        Looper.prepare();
+
 
         // db to query may be in other apps with this method: context.getContentResolver()
         final CursorLoader cursorLoader = new CursorLoader(context, EarthquakeEntry.CONTENT_URI,
@@ -119,7 +113,8 @@ public class DbUtils {
     }
 
 
-    public static Earthquake cursor2Earthquake(@NonNull final EarthquakeCursor values) {
+    public static Earthquake cursor2Earthquake(@NonNull final Cursor val) {
+        final EarthquakeCursor values = new EarthquakeCursor(val);
         return new Earthquake()
                 .setMagnitude(values.getDouble(EarthquakeEntry.MAGNITUDE))
                 .setPrimaryLocation(values.getString(EarthquakeEntry.PRIMARY_LOCATION))

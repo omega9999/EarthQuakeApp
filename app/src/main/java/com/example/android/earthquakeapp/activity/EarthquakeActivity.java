@@ -1,6 +1,9 @@
 package com.example.android.earthquakeapp.activity;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.earthquakeapp.Configurations;
@@ -21,6 +26,7 @@ import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.loader.EarthquakeAdapter;
+import com.example.android.earthquakeapp.provider.db.DbUtils;
 import com.example.android.earthquakeapp.provider.db.EarthquakeDataDbLoader;
 
 /*
@@ -31,7 +37,7 @@ TODO Tips for building a great UI https://developer.android.com/guide/topics/ui
 TODO USGS Earthquake real time feeds and notifications: http://earthquake.usgs.gov/earthquakes/feed/v1.0/index.php
 TODO USGS Real-Time Earthquake Data in Spreadsheet Format: http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php
 */
-public class EarthquakeActivity extends AppCompatActivity implements EarthquakeCallback {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, EarthquakeCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,8 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
             }
 
         });
+
+        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
 
     }
 
@@ -126,6 +134,26 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return DbUtils.getEarthquake(this);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        //mPetNumber = data.getCount();
+        mAdapter.swapCursor(data);
+        invalidateOptionsMenu();
+    }
+
+
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 
 

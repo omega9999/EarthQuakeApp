@@ -78,7 +78,7 @@ public class EarthquakeAdapter extends CursorAdapter {
 
         final int position = cursor.getPosition();
 
-        final Earthquake earthquake = DbUtils.cursor2Earthquake((EarthquakeCursor) cursor);
+        final Earthquake earthquake = DbUtils.cursor2Earthquake(cursor);
         if (earthquake != null) {
             final TextView magnitude = root.findViewById(R.id.magnitude);
             final TextView location = root.findViewById(R.id.primary_location);
