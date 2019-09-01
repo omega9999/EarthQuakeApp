@@ -45,6 +45,7 @@ public class Earthquake implements Parcelable {
         dest.writeDouble((mLongitude));
         dest.writeDouble((mLatitude));
         dest.writeDouble((mDept));
+        dest.writeString((mUrlRequest));
     }
 
     public Earthquake(Parcel in) {
@@ -59,6 +60,7 @@ public class Earthquake implements Parcelable {
             this.setLongitude((in.readDouble()));
             this.setLatitude((in.readDouble()));
             this.setDept((in.readDouble()));
+            this.setUrlRequest(in.readString());
         }
     }
 
@@ -154,6 +156,15 @@ public class Earthquake implements Parcelable {
         return this;
     }
 
+    public String getUrlRequest() {
+        return mUrlRequest;
+    }
+
+    public Earthquake setUrlRequest(String urlRequest) {
+        this.mUrlRequest = urlRequest;
+        return this;
+    }
+
     public boolean isCoordinates() {
         return getLatitude() != null && getLongitude() != null;
     }
@@ -191,6 +202,9 @@ public class Earthquake implements Parcelable {
     private Double mLongitude;
     private Double mLatitude;
     private Double mDept;
+    private String mUrlRequest;
+
+
 
 
 }

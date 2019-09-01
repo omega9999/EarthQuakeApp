@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.loader;
+package com.example.android.earthquakeapp.provider.loader;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +7,9 @@ import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,16 +23,9 @@ import com.example.android.earthquakeapp.activity.MapsActivity;
 import com.example.android.earthquakeapp.activity.UiUtils;
 import com.example.android.earthquakeapp.activity.WebActivity;
 import com.example.android.earthquakeapp.bean.Earthquake;
-import com.example.android.earthquakeapp.bean.EarthquakeList;
 import com.example.android.earthquakeapp.provider.db.DbUtils;
-import com.example.android.earthquakeapp.provider.db.EarthquakeCursor;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
 
 public class EarthquakeAdapter extends CursorAdapter {
 

@@ -6,7 +6,6 @@ import android.content.CursorLoader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -27,78 +26,116 @@ import java.util.List;
 import java.util.Locale;
 
 
-
 public class DbUtils {
 
     @Nullable
     @CheckResult
-    public static String[] getQueryUrl(@NonNull final Context context) {
+    static String[] getQueryUrl(@NonNull final Context context) {
 
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String minMagnitude = sharedPrefs.getString(context.getString(R.string.settings_min_magnitude_key), context.getString(R.string.settings_min_magnitude_default));
         final String orderBy = sharedPrefs.getString(context.getString(R.string.settings_order_by_key), context.getString(R.string.settings_order_by_default));
         final String limitRow = sharedPrefs.getString(context.getString(R.string.settings_limit_row_key), context.getString(R.string.settings_limit_row_default));
-        final int limit = Integer.valueOf(limitRow);
         final int startTimeLimit = Integer.valueOf(sharedPrefs.getString(context.getString(R.string.settings_start_time_limit_key), context.getString(R.string.settings_start_time_limit_default)));
         final Uri baseUri = Uri.parse(BASE_USGS_REQUEST_URL);
 
         final Calendar calendar = GregorianCalendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -1 * startTimeLimit);
-        final String startTime = DATE_FORMAT.format(calendar.getTime());
+        final long startTimeTarget = calendar.getTime().getTime();
+        //DATE_FORMAT.format(calendar.getTime());
 
-        int quotient = limit / MAX_SET;
-        int rest = (quotient * MAX_SET) < limit ? 1 : 0;
-        String[] urls = new String[quotient + rest];
+        final Date endTimeDate = new Date();
+        long endTime = endTimeDate.getTime();
+        calendar.setTime(endTimeDate);
+        calendar.add(Calendar.MONTH, -1);
+        long startTime = Math.max(calendar.getTimeInMillis(),startTimeTarget);
 
-        for (int index = 0; index < urls.length; index++){
+        ArrayList<String> urls = new ArrayList<>();
+
+        while(startTimeTarget <= startTime) {
+            if (startTime >= endTime){
+                break;
+            }
             final Uri.Builder uriBuilder = baseUri.buildUpon();
             uriBuilder.appendQueryParameter("format", "geojson");
-            uriBuilder.appendQueryParameter("limit", String.valueOf(MAX_SET));
+            //uriBuilder.appendQueryParameter("limit", limitRow);
             uriBuilder.appendQueryParameter("minmag", minMagnitude);
             uriBuilder.appendQueryParameter("orderby", orderBy);
-            uriBuilder.appendQueryParameter("offset", String.valueOf(index+1));
-            //uriBuilder.appendQueryParameter("endtime", "2019-08-16"); // default present
-            uriBuilder.appendQueryParameter("starttime", startTime); // default now - 30 days
-            urls[index] = uriBuilder.toString();
+            //uriBuilder.appendQueryParameter("offset", String.valueOf(index + 1));
+            uriBuilder.appendQueryParameter("endtime", long2DateString(endTime)); // default present
+            uriBuilder.appendQueryParameter("starttime", long2DateString(startTime)); // default now - 30 days
+            urls.add(uriBuilder.toString());
+
+            /*
+            calendar.setTime(new Date(startTime));
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
+            endTime = calendar.getTimeInMillis();
+            */
+            endTime = startTime;
+            calendar.setTime(new Date(startTime));
+            calendar.add(Calendar.MONTH, -1);
+            startTime = Math.max(calendar.getTimeInMillis(),startTimeTarget);
+
         }
-        return urls;
+        return urls.toArray(new String[0]);
+    }
+
+    private static String long2DateString(final long time){
+        return DATE_FORMAT.format(new Date(time).getTime());
     }
 
 
-
-    public static void addEarthquake(@NonNull final Context context, @NonNull final List<Earthquake> earthquakes) {
+    static void addEarthquake(@NonNull final Context context, @NonNull final List<Earthquake> earthquakes) {
         for (final Earthquake earthquake : earthquakes) {
             final ContentValues values = earthquake2ContentValues(earthquake);
             context.getContentResolver().insert(EarthquakeEntry.CONTENT_URI, values);
         }
     }
 
-    public static int getCountEarthquake(@NonNull final Context context){
+    static int getCountEarthquake(@NonNull final Context context) {
         final String selection = null;
         final String[] selectionArgs = null;
         final String orderBy = null;
 
-        Cursor cursor = context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy );
+        Cursor cursor = context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy);
         int res = cursor.getCount();
         cursor.close();
         return res;
     }
 
-    public static EarthquakeCursor getEarthquakeSync(@NonNull final Context context){
+    public static EarthquakeCursor getEarthquakeSync(@NonNull final Context context) {
         final String selection = null;
         final String[] selectionArgs = null;
         final String orderBy = null;
 
-        Cursor cursor = context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy );
+        Cursor cursor = context.getContentResolver().query(EarthquakeEntry.CONTENT_URI, PROJECTION, selection, selectionArgs, orderBy);
         return new EarthquakeCursor(cursor);
     }
 
     public static CursorLoader getEarthquake(@NonNull final Context context) {
         final String selection = null;
         final String[] selectionArgs = null;
-        final String orderBy = null;
+        String orderBy = null;
 
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final String orderByString = sharedPrefs.getString(context.getString(R.string.settings_order_by_key), context.getString(R.string.settings_order_by_default));
 
+        if (orderByString != null) {
+            switch (orderByString) {
+                case "magnitude":
+                    orderBy = EarthquakeEntry.MAGNITUDE + " DESC";
+                    break;
+                case "time":
+                    orderBy = EarthquakeEntry.DATE + " DESC";
+                    break;
+                case "magnitude-asc":
+                    orderBy = EarthquakeEntry.MAGNITUDE + " ASC";
+                    break;
+                case "time-asc":
+                    orderBy = EarthquakeEntry.DATE + " ASC";
+                    break;
+            }
+        }
 
         // db to query may be in other apps with this method: context.getContentResolver()
         final CursorLoader cursorLoader = new CursorLoader(context, EarthquakeEntry.CONTENT_URI,
@@ -108,7 +145,7 @@ public class DbUtils {
     }
 
     @CheckResult
-    public static int deleteAllQuake(@NonNull final Context context) {
+    static int deleteAllQuake(@NonNull final Context context) {
         return context.getContentResolver().delete(EarthquakeEntry.CONTENT_URI, null, null);
     }
 
@@ -124,7 +161,8 @@ public class DbUtils {
                 .setId(values.getString(EarthquakeEntry.ID_GEO))
                 .setLongitude(values.getDouble(EarthquakeEntry.LONGITUDE))
                 .setLatitude(values.getDouble(EarthquakeEntry.LATITUDE))
-                .setDept(values.getDouble(EarthquakeEntry.DEPT));
+                .setDept(values.getDouble(EarthquakeEntry.DEPT))
+                .setUrlRequest(values.getString(EarthquakeEntry.URL_REQUEST));
     }
 
     static ContentValues earthquake2ContentValues(Earthquake quake) {
@@ -134,6 +172,7 @@ public class DbUtils {
         values.put(EarthquakeEntry.LOCATION_OFFSET, quake.getLocationOffset());
         values.put(EarthquakeEntry.DATE, quake.getDate().getTime());
         values.put(EarthquakeEntry.URL, quake.getUrl());
+        values.put(EarthquakeEntry.URL_REQUEST, quake.getUrlRequest());
         values.put(EarthquakeEntry.ID_GEO, quake.getId());
         values.put(EarthquakeEntry.LONGITUDE, quake.getLongitude());
         values.put(EarthquakeEntry.LATITUDE, quake.getLatitude());
@@ -151,10 +190,11 @@ public class DbUtils {
             EarthquakeEntry.ID_GEO,
             EarthquakeEntry.LONGITUDE,
             EarthquakeEntry.LATITUDE,
-            EarthquakeEntry.DEPT
+            EarthquakeEntry.DEPT,
+            EarthquakeEntry.URL_REQUEST
     };
 
-    private static final int MAX_SET = 500;
+    private static final int MAX_SET = 50;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     private static final String BASE_USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
     private static final String BASE_USGS_COUNT_URL = "https://earthquake.usgs.gov/fdsnws/event/1/count";

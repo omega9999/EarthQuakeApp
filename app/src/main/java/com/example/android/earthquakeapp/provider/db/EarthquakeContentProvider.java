@@ -17,7 +17,7 @@ import com.example.android.earthquakeapp.provider.exception.IllegalUriException;
 
 public class EarthquakeContentProvider extends ContentProvider {
     public EarthquakeContentProvider() {
-        Log.d(TAG,"EarthquakeContentProvider constructor");
+        Log.d(TAG, "EarthquakeContentProvider constructor");
     }
 
     @Override
@@ -71,11 +71,13 @@ public class EarthquakeContentProvider extends ContentProvider {
     public Uri insert(@NonNull final Uri uri, @Nullable final ContentValues values) {
         int match = URI_MATCHER.match(uri);
         if (match == QUAKES) {
-
-            long id = database.insert(EarthquakeEntry.TABLE_NAME, null, values);
-            if (getContext() != null) {
-                // notify all listeners that the data at the given URI has changed
-                getContext().getContentResolver().notifyChange(uri, null);
+            long id = -1;
+            if (values != null){
+                id = database.insert(EarthquakeEntry.TABLE_NAME, null, values);
+                if (getContext() != null) {
+                    // notify all listeners that the data at the given URI has changed
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
             }
             // return Uri with id appended
             return ContentUris.withAppendedId(uri, id);

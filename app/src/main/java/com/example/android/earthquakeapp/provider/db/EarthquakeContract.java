@@ -47,6 +47,7 @@ final class EarthquakeContract {
         static final String LONGITUDE = "longitude";
         static final String LATITUDE = "latitude";
         static final String DEPT = "dept";
+        static final String URL_REQUEST = "url_request";
 
 
         static void onCreate(@NonNull final SQLiteDatabase db) {
@@ -68,7 +69,8 @@ final class EarthquakeContract {
                         ID_GEO + " TEXT, " +
                         LONGITUDE + " DOUBLE, " +
                         LATITUDE + " DOUBLE, " +
-                        DEPT + " DOUBLE " +
+                        DEPT + " DOUBLE, " +
+                        URL_REQUEST + " TEXT " +
                         ")";
 
         private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;

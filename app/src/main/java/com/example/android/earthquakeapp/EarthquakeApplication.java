@@ -13,8 +13,8 @@ public class EarthquakeApplication extends Application {
         super.onCreate();
         mEarthquakeDataDbLoader = EarthquakeDataDbLoader.getInstance();
         if (UiUtils.isConnected(this)){
-            Configurations.SETTINGS_CHANGED = false;
-            mEarthquakeDataDbLoader.loadData(this, null);
+            //Configurations.SETTINGS_CHANGED = false;
+            //mEarthquakeDataDbLoader.loadData(this, null);
         }
     }
 

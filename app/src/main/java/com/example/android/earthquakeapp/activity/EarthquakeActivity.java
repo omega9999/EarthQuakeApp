@@ -4,7 +4,6 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +24,7 @@ import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
-import com.example.android.earthquakeapp.loader.EarthquakeAdapter;
+import com.example.android.earthquakeapp.provider.loader.EarthquakeAdapter;
 import com.example.android.earthquakeapp.provider.db.DbUtils;
 import com.example.android.earthquakeapp.provider.db.EarthquakeDataDbLoader;
 
@@ -36,7 +35,11 @@ TODO Data.gov: http://data.gov
 TODO Tips for building a great UI https://developer.android.com/guide/topics/ui
 TODO USGS Earthquake real time feeds and notifications: http://earthquake.usgs.gov/earthquakes/feed/v1.0/index.php
 TODO USGS Real-Time Earthquake Data in Spreadsheet Format: http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php
+
+TODO https://earthquake.usgs.gov/data/
+TODO APIs spec https://earthquake.usgs.gov/fdsnws/event/1/#format-geojson
 */
+// TODO make link to https://earthquake.usgs.gov/earthquakes/map/
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, EarthquakeCallback {
 
     @Override
@@ -49,9 +52,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         this.mProgressBar = findViewById(R.id.loading_indicator);
 
 
-
         if (checkConnection()) {
-            if (Configurations.SETTINGS_CHANGED){
+            if (Configurations.SETTINGS_CHANGED) {
                 Configurations.SETTINGS_CHANGED = false;
                 EarthquakeDataDbLoader.getInstance().loadData(this, this);
             }
@@ -65,10 +67,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
             // listener on row, not into a single piece of it
-            final Earthquake earthquake = (Earthquake)mAdapter.getItem(position);
-
-            if (earthquake.getUrl() != null) {
-                Log.w(TAG, String.format("View id %1$s, id %2$s, id target %3$s", view.getId(), id, R.id.web));
+            final Earthquake earthquake = DbUtils.cursor2Earthquake((Cursor) mAdapter.getItem(position));
+            if (earthquake != null) {
+                Toast.makeText(this, getString(R.string.info_quake, earthquake.getId(), earthquake.getUrlRequest()), Toast.LENGTH_LONG).show();
             }
 
         });
@@ -144,11 +145,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        //mPetNumber = data.getCount();
         mAdapter.swapCursor(data);
         invalidateOptionsMenu();
     }
-
 
 
     @Override
@@ -158,8 +157,19 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
 
     @Override
-    public void notifyEarthquake(int numEarthquake) {
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, getString(R.string.number_of_earthquakes, numEarthquake), Toast.LENGTH_SHORT).show());
+    public void notifyNewData() {
+        runOnUiThread(() -> {
+            Loader loader = getLoaderManager().getLoader(EARTHQUAKE_LOADER_ID);
+            if (loader != null) {
+                loader.forceLoad();
+            }
+        });
+    }
+
+    @Override
+    public void notifyEarthquakeFinalCount(int numEarthquake) {
+        Log.w(TAG, getString(R.string.number_of_earthquakes, numEarthquake));
+        runOnUiThread(() -> Toast.makeText(this, getString(R.string.number_of_earthquakes, numEarthquake), Toast.LENGTH_SHORT).show());
     }
 
 

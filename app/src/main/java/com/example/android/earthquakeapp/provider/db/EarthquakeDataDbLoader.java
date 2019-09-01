@@ -21,7 +21,7 @@ public class EarthquakeDataDbLoader {
         return ourInstance;
     }
 
-    public String status(){
+    public String status() {
         return "Is alive? " + thread.isAlive();
     }
 
@@ -33,6 +33,10 @@ public class EarthquakeDataDbLoader {
     private void loadDataInner(@NonNull Context context, @Nullable EarthquakeCallback callback) {
         final String[] urls = DbUtils.getQueryUrl(context);
         final int rows = DbUtils.deleteAllQuake(context);
+        Log.d(TAG,"Deleted rows " + rows);
+        for (String url:urls             ) {
+            Log.d(TAG,"Url: " + url);
+        }
 
         final Handler[] handlers = new Handler[THREADS.length];
         final boolean[] connectionEnded = new boolean[urls.length];
@@ -54,11 +58,18 @@ public class EarthquakeDataDbLoader {
             handlers[indexHandler].post(() -> {
                 final HttpConnection connection;
                 try {
+                    Log.d(TAG,"Handler["+indexHandler+"] manage connection " + url);
                     connection = new HttpConnection(url);
                     final List<Earthquake> list = JsonUtils.convertFromJSON(context, connection.makeHttpGetRequest());
                     if (list != null && !list.isEmpty()) {
+                        for (Earthquake quake : list) {
+                            quake.setUrlRequest(url);
+                        }
                         Log.d(TAG, "save list on db " + list.size());
                         DbUtils.addEarthquake(context, list);
+                        if (callback != null) {
+                            callback.notifyNewData();
+                        }
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Problem", e);
@@ -73,7 +84,7 @@ public class EarthquakeDataDbLoader {
                         if (res) {
                             // ALL works finished
                             final int count = DbUtils.getCountEarthquake(context);
-                            callback.notifyEarthquake(count);
+                            callback.notifyEarthquakeFinalCount(count);
                         }
                     }
                 }
