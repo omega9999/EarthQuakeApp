@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +16,8 @@ import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.earthquakeapp.R;
@@ -24,6 +25,7 @@ import com.example.android.earthquakeapp.activity.MapsActivity;
 import com.example.android.earthquakeapp.activity.UiUtils;
 import com.example.android.earthquakeapp.activity.WebActivity;
 import com.example.android.earthquakeapp.bean.Earthquake;
+import com.example.android.earthquakeapp.db.room.EarthquakeViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +37,21 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
     public EarthquakeAdapter(@NonNull final Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
+        if (context instanceof FragmentActivity){
+            // Get a new or existing ViewModel from the ViewModelProvider.
+            mEarthquakeViewModel = ViewModelProviders.of((FragmentActivity)context).get(EarthquakeViewModel.class);
+
+            mEarthquakeViewModel.getAllEarthquakes().observe((FragmentActivity)context, earthquakes -> {
+                // Update the cached copy of the earthquakes in the adapter.
+                setEarthquakes(earthquakes);
+                if (onChangeListener != null){
+                    onChangeListener.onChange(earthquakes);
+                }
+            });
+        }
+        else {
+            mEarthquakeViewModel = null;
+        }
     }
 
     @CheckResult
@@ -44,6 +61,14 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
 
     public interface OnItemClickListener {
         void onItemClick(View parent, View view, int position, long id);
+    }
+
+    public interface OnChangeListener{
+        void onChange(List<Earthquake> earthquakes);
+    }
+
+    public void setOnChangeListener(@Nullable OnChangeListener onChangeListener){
+        this.onChangeListener = onChangeListener;
     }
 
     @NonNull
@@ -153,7 +178,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
         onItemClickListener = clickListener;
     }
 
-    void setEarthquakes(@NonNull final List<Earthquake> earthquakes) {
+    public void setEarthquakes(@Nullable final List<Earthquake> earthquakes) {
         this.mEarthquakes = earthquakes;
         notifyDataSetChanged();
     }
@@ -196,8 +221,10 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
         private final View root;
     }
 
-    private List<Earthquake> mEarthquakes = Collections.emptyList(); // Cached copy of words
+    private List<Earthquake> mEarthquakes = Collections.emptyList(); // Cached copy of earthquakes
     private OnItemClickListener onItemClickListener;
+    private OnChangeListener onChangeListener;
+    private final EarthquakeViewModel mEarthquakeViewModel;
     private final LayoutInflater mInflater;
     private final Context mContext;
     private static final String TAG = EarthquakeAdapter.class.getSimpleName();

@@ -41,7 +41,7 @@ public interface EarthquakeDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Earthquake word);
+    void insert(Earthquake earthquake);
 
     @Query("DELETE FROM earth_quake")
     void deleteAll();

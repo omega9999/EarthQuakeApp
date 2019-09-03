@@ -13,6 +13,7 @@ import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.db.connection.HttpConnection;
 import com.example.android.earthquakeapp.db.geojson.JsonUtils;
+import com.example.android.earthquakeapp.db.room.DbUtils;
 
 import java.util.List;
 

@@ -10,7 +10,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.android.earthquakeapp.Configurations;
@@ -20,6 +24,8 @@ import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.db.loader.EarthquakeAdapter;
 import com.example.android.earthquakeapp.db.room.EarthquakeViewModel;
 import com.example.android.earthquakeapp.db.loader.EarthquakeDataDbLoader;
+
+import java.util.List;
 
 /*
 TODO Programmable Web API Directory: http://www.programmableweb.com/apis/directory
@@ -65,7 +71,6 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
             if (earthquake != null) {
                 Toast.makeText(this, getString(R.string.info_quake, earthquake.getId(), earthquake.getUrlRequest()), Toast.LENGTH_LONG).show();
             }
-
         });
     }
 
@@ -152,7 +157,7 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
     private TextView mEmptyList;
     private ProgressBar mProgressBar;//TODO gestire progressbar incrementale
 
-    private EarthquakeViewModel mEarthquakeViewModel;
+
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
 
