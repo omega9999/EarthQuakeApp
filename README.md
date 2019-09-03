@@ -45,7 +45,8 @@ Casi risolti:
     (deprecato) https://developer.android.com/reference/android/preference/Preference.html
     (deprecato) https://developer.android.com/reference/android/preference/ListPreference.html
 12)  Uri.Builder class: https://developer.android.com/reference/android/net/Uri.Builder.html
-    
+13) estensione di RecyclerView con EmptyRecyclerView per gestire la lista vuota
+14) setOnItemClickListener sull'adapter per gestire il listener mancante sulle righe della RecyclerView
     
 
 TODO:

@@ -1,5 +1,5 @@
 
-package com.example.android.earthquakeapp.provider.geojson;
+package com.example.android.earthquakeapp.db.geojson;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -62,7 +62,7 @@ class GeoJSON implements Serializable, Parcelable {
     private GeoJSON(Parcel in) {
         this.type = ((String) in.readValue((String.class.getClassLoader())));
         this.metadata = ((Metadata) in.readValue((Metadata.class.getClassLoader())));
-        in.readList(this.features, (com.example.android.earthquakeapp.provider.geojson.Feature.class.getClassLoader()));
+        in.readList(this.features, (com.example.android.earthquakeapp.db.geojson.Feature.class.getClassLoader()));
         in.readList(this.bbox, (java.lang.Double.class.getClassLoader()));
     }
 

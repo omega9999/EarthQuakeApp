@@ -4,7 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.android.earthquakeapp.activity.UiUtils;
-import com.example.android.earthquakeapp.provider.db.EarthquakeDataDbLoader;
+import com.example.android.earthquakeapp.db.loader.EarthquakeDataDbLoader;
 
 public class EarthquakeApplication extends Application {
 

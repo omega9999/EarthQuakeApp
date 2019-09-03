@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <com.example.android.earthquakeapp.activity.EmptyRecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +17,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/container"
         app:layout_constraintEnd_toEndOf="@+id/container"
         app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container" />
+        app:layout_constraintTop_toTopOf="@+id/container"
+        tools:listitem="@layout/earthquake_item" />
 
     <TextView
         android:id="@+id/empty_view"

@@ -4,16 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.example.android.earthquakeapp.activity.UiUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
+@Entity(tableName = "earth_quake")
 public class Earthquake implements Parcelable {
 
-    public Earthquake() {
+    public Earthquake(@NonNull String id) {
+        this.mId = id;
     }
 
     public static final Creator<Earthquake> CREATOR = new Creator<Earthquake>() {
@@ -36,32 +42,29 @@ public class Earthquake implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
         dest.writeDouble((mMagnitude));
         dest.writeString(mPrimaryLocation);
         dest.writeString(mLocationOffset);
         dest.writeLong(mDate.getTime());
         dest.writeString(mUrl);
-        dest.writeString(mId);
         dest.writeDouble((mLongitude));
         dest.writeDouble((mLatitude));
         dest.writeDouble((mDept));
         dest.writeString((mUrlRequest));
     }
 
-    public Earthquake(Parcel in) {
-        this();
-        if (in != null) {
-            this.setMagnitude((in.readDouble()));
-            this.setPrimaryLocation(in.readString());
-            this.setLocationOffset(in.readString());
-            this.setDate(new Date(in.readLong()));
-            this.setUrl(in.readString());
-            this.setId(in.readString());
-            this.setLongitude((in.readDouble()));
-            this.setLatitude((in.readDouble()));
-            this.setDept((in.readDouble()));
-            this.setUrlRequest(in.readString());
-        }
+    public Earthquake(@NonNull final Parcel in) {
+        this(in.readString());
+        this.setMagnitude((in.readDouble()));
+        this.setPrimaryLocation(in.readString());
+        this.setLocationOffset(in.readString());
+        this.setDate(new Date(in.readLong()));
+        this.setUrl(in.readString());
+        this.setLongitude((in.readDouble()));
+        this.setLatitude((in.readDouble()));
+        this.setDept((in.readDouble()));
+        this.setUrlRequest(in.readString());
     }
 
 
@@ -120,13 +123,9 @@ public class Earthquake implements Parcelable {
         return this;
     }
 
+    @NonNull
     public String getId() {
         return mId;
-    }
-
-    public Earthquake setId(String id) {
-        this.mId = id;
-        return this;
     }
 
     public Double getLongitude() {
@@ -183,7 +182,6 @@ public class Earthquake implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (mId == null) return false;
         Earthquake that = (Earthquake) o;
         return mId.equals(that.mId);
     }
@@ -193,18 +191,38 @@ public class Earthquake implements Parcelable {
         return mId.hashCode();
     }
 
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id_geo")
+    private final String mId;
+
+
+    @ColumnInfo(name = "magnitude")
     private Double mMagnitude;
+
+    @ColumnInfo(name = "primary_location")
     private String mPrimaryLocation;
+
+    @ColumnInfo(name = "location_offset")
     private String mLocationOffset;
+
+    @ColumnInfo(name = "date")
     private Date mDate;
+
+    @ColumnInfo(name = "url")
     private String mUrl;
-    private String mId;
+
+    @ColumnInfo(name = "longitude")
     private Double mLongitude;
+
+    @ColumnInfo(name = "latitude")
     private Double mLatitude;
+
+    @ColumnInfo(name = "dept")
     private Double mDept;
+
+    @ColumnInfo(name = "url_request")
     private String mUrlRequest;
-
-
-
 
 }

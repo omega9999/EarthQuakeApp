@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.provider.exception;
+package com.example.android.earthquakeapp.db.exception;
 
 import androidx.annotation.NonNull;
 

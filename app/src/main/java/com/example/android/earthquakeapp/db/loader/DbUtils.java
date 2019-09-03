@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.provider.db;
+package com.example.android.earthquakeapp.db.loader;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
-import com.example.android.earthquakeapp.provider.db.EarthquakeContract.EarthquakeEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

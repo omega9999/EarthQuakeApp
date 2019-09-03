@@ -1,5 +1,5 @@
 
-package com.example.android.earthquakeapp.provider.geojson;
+package com.example.android.earthquakeapp.db.geojson;
 
 import java.io.Serializable;
 import android.os.Parcel;

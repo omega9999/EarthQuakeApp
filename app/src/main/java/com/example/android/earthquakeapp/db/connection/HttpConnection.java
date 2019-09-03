@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.provider.connection;
+package com.example.android.earthquakeapp.db.connection;
 
 import android.util.Log;
 

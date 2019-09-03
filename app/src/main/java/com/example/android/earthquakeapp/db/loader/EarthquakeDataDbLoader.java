@@ -1,4 +1,4 @@
-package com.example.android.earthquakeapp.provider.db;
+package com.example.android.earthquakeapp.db.loader;
 
 import android.content.Context;
 import android.os.Handler;
@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.bean.Earthquake;
-import com.example.android.earthquakeapp.provider.connection.HttpConnection;
-import com.example.android.earthquakeapp.provider.geojson.JsonUtils;
+import com.example.android.earthquakeapp.db.connection.HttpConnection;
+import com.example.android.earthquakeapp.db.geojson.JsonUtils;
 
 import java.util.List;
 

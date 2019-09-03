@@ -1,32 +1,25 @@
 package com.example.android.earthquakeapp.activity;
 
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
-import com.example.android.earthquakeapp.provider.loader.EarthquakeAdapter;
-import com.example.android.earthquakeapp.provider.db.DbUtils;
-import com.example.android.earthquakeapp.provider.db.EarthquakeDataDbLoader;
+import com.example.android.earthquakeapp.db.loader.EarthquakeAdapter;
+import com.example.android.earthquakeapp.db.room.EarthquakeViewModel;
+import com.example.android.earthquakeapp.db.loader.EarthquakeDataDbLoader;
 
 /*
 TODO Programmable Web API Directory: http://www.programmableweb.com/apis/directory
@@ -40,17 +33,16 @@ TODO https://earthquake.usgs.gov/data/
 TODO APIs spec https://earthquake.usgs.gov/fdsnws/event/1/#format-geojson
 */
 // TODO make link to https://earthquake.usgs.gov/earthquakes/map/
-public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, EarthquakeCallback {
+public class EarthquakeActivity extends AppCompatActivity implements EarthquakeCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        final ListView earthquakeListView = findViewById(R.id.list);
+        final EmptyRecyclerView earthquakeListView = findViewById(R.id.list);
         this.mEmptyList = findViewById(R.id.empty_view);
         this.mProgressBar = findViewById(R.id.loading_indicator);
-
 
         if (checkConnection()) {
             if (Configurations.SETTINGS_CHANGED) {
@@ -61,21 +53,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         // Find a reference to the {@link ListView} in the layout
 
-        this.mAdapter = new EarthquakeAdapter(this, null);
+        this.mAdapter = new EarthquakeAdapter(this);
         earthquakeListView.setAdapter(mAdapter);
+        earthquakeListView.setLayoutManager(new LinearLayoutManager(this));
         earthquakeListView.setEmptyView(this.mEmptyList);
 
-        earthquakeListView.setOnItemClickListener((parent, view, position, id) -> {
+
+        this.mAdapter.setOnItemClickListener((parent, view, position, id) -> {
             // listener on row, not into a single piece of it
-            final Earthquake earthquake = DbUtils.cursor2Earthquake((Cursor) mAdapter.getItem(position));
+            final Earthquake earthquake = mAdapter.getItem(position);
             if (earthquake != null) {
                 Toast.makeText(this, getString(R.string.info_quake, earthquake.getId(), earthquake.getUrlRequest()), Toast.LENGTH_LONG).show();
             }
 
         });
-
-        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
-
     }
 
     @Override
@@ -137,43 +128,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         }
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        return DbUtils.getEarthquake(this);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-        invalidateOptionsMenu();
-    }
-
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
 
     @Override
     public void notifyNewData(final int earthquakeAdded, int numJobCompleted, int numJobTotal) {
         runOnUiThread(() -> {
-            final Loader loader = getLoaderManager().getLoader(EARTHQUAKE_LOADER_ID);
-            if (loader != null && loader.isStarted()) {
-                Log.w(TAG,"forceLoad");
-                loader.forceLoad();
-                Toast.makeText(this, getString(R.string.number_of_earthquakes_added, earthquakeAdded, numJobCompleted, numJobTotal), Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Log.e(TAG,"loader not initiated?");
-                getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
-            }
+            invalidateOptionsMenu();
+            final String str = getString(R.string.number_of_earthquakes_added, earthquakeAdded, numJobCompleted, numJobTotal);
+            Log.w(TAG, str);
+            runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
         });
     }
 
     @Override
     public void notifyEarthquakeFinalCount(int numEarthquake) {
+        invalidateOptionsMenu();
         final String str = getString(R.string.number_of_earthquakes, numEarthquake);
         Log.w(TAG, str);
         runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
@@ -184,10 +152,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     private TextView mEmptyList;
     private ProgressBar mProgressBar;//TODO gestire progressbar incrementale
 
-
-    private static final String BASE_URL = "BASE_URL";
-    private static final int EARTHQUAKE_LOADER_ID = 1;
-
+    private EarthquakeViewModel mEarthquakeViewModel;
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
 
