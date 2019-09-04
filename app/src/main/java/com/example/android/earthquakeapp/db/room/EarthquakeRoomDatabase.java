@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.android.earthquakeapp.bean.Earthquake;
+import com.example.android.earthquakeapp.db.Converters;
 
-@Database(entities = {Earthquake.class}, version = 1)
-
-
+@Database(entities = {Earthquake.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class EarthquakeRoomDatabase extends RoomDatabase {
 
     public abstract EarthquakeDao earthquakeDao();

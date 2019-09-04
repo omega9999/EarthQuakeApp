@@ -29,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, WriteMark, MoveMap {
@@ -107,10 +108,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double lonMin = 0;
                 double latMax = 0;
                 double lonMax = 0;
-                final EarthquakeCursor cursor = DbUtils.getEarthquakeSync(this);
+                final List<Earthquake> cursor = DbUtils.getEarthquakeSync(this.getApplication());
                 int index = 0;
-                while(cursor.moveToNext()) {
-                    final Earthquake earthquake = DbUtils.cursor2Earthquake(cursor);
+                for (final Earthquake earthquake:cursor){
                     if (index == 0) {
                         latMin = earthquake.getLatitude();
                         lonMin = earthquake.getLongitude();

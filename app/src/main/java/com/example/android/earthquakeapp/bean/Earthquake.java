@@ -82,45 +82,40 @@ public class Earthquake implements Parcelable {
         return mMagnitude;
     }
 
-    public Earthquake setMagnitude(Double magnitude) {
+    public void setMagnitude(Double magnitude) {
         this.mMagnitude = magnitude;
-        return this;
     }
 
     public String getPrimaryLocation() {
         return mPrimaryLocation;
     }
 
-    public Earthquake setPrimaryLocation(String location) {
+    public void setPrimaryLocation(String location) {
         this.mPrimaryLocation = location;
-        return this;
     }
 
     public String getLocationOffset() {
         return mLocationOffset;
     }
 
-    public Earthquake setLocationOffset(String location) {
+    public void setLocationOffset(String location) {
         this.mLocationOffset = location;
-        return this;
     }
 
     public Date getDate() {
         return mDate;
     }
 
-    public Earthquake setDate(Date date) {
+    public void setDate(Date date) {
         this.mDate = date;
-        return this;
     }
 
     public String getUrl() {
         return mUrl;
     }
 
-    public Earthquake setUrl(String url) {
+    public void setUrl(String url) {
         this.mUrl = url;
-        return this;
     }
 
     @NonNull
@@ -132,36 +127,32 @@ public class Earthquake implements Parcelable {
         return mLongitude;
     }
 
-    public Earthquake setLongitude(Double longitude) {
+    public void setLongitude(Double longitude) {
         this.mLongitude = longitude;
-        return this;
     }
 
     public Double getLatitude() {
         return mLatitude;
     }
 
-    public Earthquake setLatitude(Double latitude) {
+    public void setLatitude(Double latitude) {
         this.mLatitude = latitude;
-        return this;
     }
 
     public Double getDept() {
         return mDept;
     }
 
-    public Earthquake setDept(Double dept) {
+    public void setDept(Double dept) {
         this.mDept = dept;
-        return this;
     }
 
     public String getUrlRequest() {
         return mUrlRequest;
     }
 
-    public Earthquake setUrlRequest(String urlRequest) {
+    public void setUrlRequest(String urlRequest) {
         this.mUrlRequest = urlRequest;
-        return this;
     }
 
     public boolean isCoordinates() {
@@ -197,31 +188,39 @@ public class Earthquake implements Parcelable {
     @ColumnInfo(name = "id_geo")
     private final String mId;
 
-
+    @Nullable
     @ColumnInfo(name = "magnitude")
     private Double mMagnitude;
 
+    @Nullable
     @ColumnInfo(name = "primary_location")
     private String mPrimaryLocation;
 
+    @Nullable
     @ColumnInfo(name = "location_offset")
     private String mLocationOffset;
 
+    @Nullable
     @ColumnInfo(name = "date")
     private Date mDate;
 
+    @Nullable
     @ColumnInfo(name = "url")
     private String mUrl;
 
+    @Nullable
     @ColumnInfo(name = "longitude")
     private Double mLongitude;
 
+    @Nullable
     @ColumnInfo(name = "latitude")
     private Double mLatitude;
 
+    @Nullable
     @ColumnInfo(name = "dept")
     private Double mDept;
 
+    @Nullable
     @ColumnInfo(name = "url_request")
     private String mUrlRequest;
 

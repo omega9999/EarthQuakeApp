@@ -53,7 +53,7 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
         if (checkConnection()) {
             if (Configurations.SETTINGS_CHANGED) {
                 Configurations.SETTINGS_CHANGED = false;
-                EarthquakeDataDbLoader.getInstance().loadData(this, this);
+                EarthquakeDataDbLoader.getInstance().loadData(this.getApplication(), this);
             }
         }
 
@@ -125,7 +125,7 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
                 return true;
             case R.id.action_reload:
                 if (checkConnection()) {
-                    EarthquakeDataDbLoader.getInstance().loadData(this, this);
+                    EarthquakeDataDbLoader.getInstance().loadData(this.getApplication(), this);
                 }
                 return true;
             default:

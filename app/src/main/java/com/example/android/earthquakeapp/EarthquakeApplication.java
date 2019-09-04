@@ -21,6 +21,7 @@ public class EarthquakeApplication extends Application {
     @Override
     public void onTerminate() {
         Log.d(TAG,mEarthquakeDataDbLoader.status());
+        mEarthquakeDataDbLoader.close();
         super.onTerminate();
     }
 

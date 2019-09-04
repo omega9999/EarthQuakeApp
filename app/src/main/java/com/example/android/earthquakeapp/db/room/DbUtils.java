@@ -3,14 +3,18 @@ package com.example.android.earthquakeapp.db.room;
 import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 
+import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -30,9 +34,8 @@ public class DbUtils {
         return getEarthquakeSync(application).size();
     }
 
-    public static List<Earthquake> getEarthquakeSync(@NonNull final Application application) {
-        final EarthquakeViewModel model = new EarthquakeViewModel(application);
-        return model.getAllEarthquakes().getValue();
+    public static List<Earthquake> getEarthquakeSync(@NonNull final Context context) {
+        return new ArrayList<>();
     }
 
 

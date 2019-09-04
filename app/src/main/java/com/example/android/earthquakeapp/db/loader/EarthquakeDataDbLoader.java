@@ -1,5 +1,6 @@
 package com.example.android.earthquakeapp.db.loader;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -15,9 +16,10 @@ import com.example.android.earthquakeapp.db.connection.HttpConnection;
 import com.example.android.earthquakeapp.db.geojson.JsonUtils;
 import com.example.android.earthquakeapp.db.room.DbUtils;
 
+import java.io.Closeable;
 import java.util.List;
 
-public class EarthquakeDataDbLoader {
+public class EarthquakeDataDbLoader implements Closeable {
     public static EarthquakeDataDbLoader getInstance() {
         return ourInstance;
     }
@@ -26,13 +28,13 @@ public class EarthquakeDataDbLoader {
         return "Is alive? " + threadMain.isAlive();
     }
 
-    public void loadData(@NonNull Context context, @Nullable EarthquakeCallback callback) {
+    public void loadData(@NonNull Application context, @Nullable EarthquakeCallback callback) {
         final Handler handler = new Handler(threadMain.getLooper());
         handler.post(() -> loadDataInner(context, callback));
     }
 
-    private void loadDataInner(@NonNull Context context, @Nullable EarthquakeCallback callback) {
-        final String[] urls = DbUtils.getQueryUrl(context);
+    private void loadDataInner(@NonNull Application context, @Nullable EarthquakeCallback callback) {
+        final String[] urls = LoaderUtils.getQueryUrl(context);
         final int rows = DbUtils.deleteAllQuake(context);
         Log.d(TAG,"Deleted rows " + rows);
         for (String url:urls             ) {
@@ -77,7 +79,7 @@ public class EarthquakeDataDbLoader {
         }
     }
 
-    private void insert(@NonNull final Context context, @NonNull final ManageInsert manage){
+    private void insert(@NonNull final Application context, @NonNull final ManageInsert manage){
         final Handler handler = new Handler(threadMain.getLooper());
         handler.post(() -> {
             Log.d(TAG, "start save list on db " + manage.list.size());
@@ -109,7 +111,7 @@ public class EarthquakeDataDbLoader {
     }
 
     @Override
-    protected void finalize() throws Throwable {
+    public void close(){
         threadMain.quit();
         threadInsert.quit();
         for (HandlerThread handlerThread : THREADS) {
@@ -117,7 +119,6 @@ public class EarthquakeDataDbLoader {
                 handlerThread.quit();
             }
         }
-        super.finalize();
     }
 
 
