@@ -36,17 +36,15 @@ public class EarthquakeDataDbLoader implements Closeable {
     private void loadDataInner(@NonNull Application context, @Nullable EarthquakeCallback callback) {
         final String[] urls = LoaderUtils.getQueryUrl(context);
         final int rows = DbUtils.deleteAllQuake(context);
-        Log.d(TAG,"Deleted rows " + rows);
-        for (String url:urls             ) {
-            Log.d(TAG,"Url: " + url);
+        Log.d(TAG, "Deleted rows " + rows);
+        for (String url : urls) {
+            Log.d(TAG, "Url: " + url);
         }
 
         final Handler[] handlers = new Handler[THREADS.length];
         final boolean[] connectionEnded = new boolean[urls.length];
 
         for (int index = 0; index < THREADS.length; index++) {
-            THREADS[index] = new HandlerThread(TAG + ".Thread_" + index);
-            THREADS[index].start();
             handlers[index] = new Handler(THREADS[index].getLooper());
         }
 
@@ -61,7 +59,7 @@ public class EarthquakeDataDbLoader implements Closeable {
             handlers[indexHandler].post(() -> {
                 final HttpConnection connection;
                 try {
-                    Log.d(TAG,"Handler["+indexHandler+"] manage connection " + url);
+                    Log.d(TAG, "Handler[" + indexHandler + "] manage connection " + url);
                     connection = new HttpConnection(url);
                     final List<Earthquake> list = JsonUtils.convertFromJSON(context, connection.makeHttpGetRequest());
                     if (list != null && !list.isEmpty()) {
@@ -79,7 +77,7 @@ public class EarthquakeDataDbLoader implements Closeable {
         }
     }
 
-    private void insert(@NonNull final Application context, @NonNull final ManageInsert manage){
+    private void insert(@NonNull final Application context, @NonNull final ManageInsert manage) {
         final Handler handler = new Handler(threadMain.getLooper());
         handler.post(() -> {
             Log.d(TAG, "start save list on db " + manage.list.size());
@@ -95,7 +93,7 @@ public class EarthquakeDataDbLoader implements Closeable {
                     int count = 0;
                     for (boolean b : manage.connectionEnded) {
                         res &= b;
-                        if (b){
+                        if (b) {
                             count++;
                         }
                     }
@@ -111,9 +109,8 @@ public class EarthquakeDataDbLoader implements Closeable {
     }
 
     @Override
-    public void close(){
+    public void close() {
         threadMain.quit();
-        threadInsert.quit();
         for (HandlerThread handlerThread : THREADS) {
             if (handlerThread != null && handlerThread.isAlive()) {
                 handlerThread.quit();
@@ -121,20 +118,24 @@ public class EarthquakeDataDbLoader implements Closeable {
         }
     }
 
+    private void start() {
+        threadMain.start();
+        for (int index = 0; index < THREADS.length; index++) {
+            THREADS[index].start();
+        }
+
+    }
+
 
     private EarthquakeDataDbLoader() {
         threadMain = new HandlerThread(TAG + ".Thread_Main");
-        threadMain.start();
-        threadInsert = new HandlerThread(TAG + ".Thread_Insert");
-        threadInsert.start();
         for (int index = 0; index < THREADS.length; index++) {
             THREADS[index] = new HandlerThread(TAG + ".Thread_" + index);
-            THREADS[index].start();
-
         }
+        start();
     }
 
-    private class ManageInsert{
+    private class ManageInsert {
         ManageInsert(List<Earthquake> list, EarthquakeCallback callback, boolean[] connectionEnded, int index) {
             this.list = list;
             this.callback = callback;
@@ -149,7 +150,6 @@ public class EarthquakeDataDbLoader implements Closeable {
     }
 
     private final HandlerThread threadMain;
-    private final HandlerThread threadInsert;
     private static final int MAX_THREAD = 5;
     private static final HandlerThread[] THREADS = new HandlerThread[MAX_THREAD];
     private static final EarthquakeDataDbLoader ourInstance = new EarthquakeDataDbLoader();
