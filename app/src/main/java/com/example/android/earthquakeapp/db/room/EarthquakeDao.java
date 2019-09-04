@@ -38,6 +38,8 @@ public interface EarthquakeDao {
     @Query("SELECT * FROM earth_quake ORDER BY magnitude DESC")
     LiveData<List<Earthquake>> getEarthquakeSortByMagnitudeDesc();
 
+    @Query("SELECT * FROM earth_quake")
+    List<Earthquake> getAllEarthquakeSync();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

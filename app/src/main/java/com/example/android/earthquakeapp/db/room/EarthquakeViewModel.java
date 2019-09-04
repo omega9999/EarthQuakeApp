@@ -13,6 +13,10 @@ import java.util.List;
 
 public class EarthquakeViewModel extends AndroidViewModel {
 
+    /**
+     * MUST be public
+     * @param application
+     */
     public EarthquakeViewModel(@NonNull final Application application) {
         super(application);
         mRepository = new EarthquakeRepository(application);
@@ -23,6 +27,12 @@ public class EarthquakeViewModel extends AndroidViewModel {
     public LiveData<List<Earthquake>> getAllEarthquakes() {
         return mAllEarthquakes;
     }
+
+    @CheckResult
+    public List<Earthquake> getAllEarthquakesSync() {
+        return mRepository.getAllEarthquakesSync();
+    }
+
 
     void insert(@NonNull final Earthquake earthquake) {
         mRepository.insert(earthquake);

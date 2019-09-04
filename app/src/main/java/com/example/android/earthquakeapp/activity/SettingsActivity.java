@@ -66,7 +66,9 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 preference.setSummary(stringValue);
             }
-            Configurations.SETTINGS_CHANGED = true;
+            if (!findPreference(getString(R.string.settings_order_by_key)).equals(preference)){
+                Configurations.SETTINGS_CHANGED = true;
+            }
             return true;
         }
 

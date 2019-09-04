@@ -103,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             HandlerThread thread = new HandlerThread(TAG + ".Thread");
             thread.start();
             Handler handler = new Handler(thread.getLooper());
-            handler.post(() -> {
+            handler.postDelayed(() -> {
                 double latMin = 0;
                 double lonMin = 0;
                 double latMax = 0;
@@ -118,7 +118,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         lonMax = earthquake.getLongitude();
 
                     }
-                    Log.d(TAG, "start list decoding");
                     writeEarthquake(earthquake);
 
                     latMin = Math.min(latMin, earthquake.getLatitude());
@@ -128,7 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     index++;
                 }
-                Log.d(TAG, String.format("Number of earthquake %1$s, number of different marks %2$s", mEarthquakes.size(), mMapMarker.keySet().size()));
+                Log.d(TAG, String.format("Number of earthquake %1$s, number of different marks %2$s", cursor.size(), mMapMarker.keySet().size()));
 
                 Log.d(TAG, "end list decoding");
 
@@ -142,7 +141,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     zoomDb = 1;
                 }
                 moveMap(new LatLng((latMax + latMin) / 2, (lonMax + lonMin) / 2), zoomDb);
-            });
+                thread.quit();
+            },1000);
         }
         else{
             double latMin;

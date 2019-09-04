@@ -34,8 +34,9 @@ public class DbUtils {
         return getEarthquakeSync(application).size();
     }
 
-    public static List<Earthquake> getEarthquakeSync(@NonNull final Context context) {
-        return new ArrayList<>();
+    public static List<Earthquake> getEarthquakeSync(@NonNull final Application application) {
+        final EarthquakeViewModel model = new EarthquakeViewModel(application);
+        return model.getAllEarthquakesSync();
     }
 
 
