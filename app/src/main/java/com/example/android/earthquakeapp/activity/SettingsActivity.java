@@ -33,8 +33,10 @@ public class SettingsActivity extends AppCompatActivity {
             final Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);
 
+            /*
             final Preference limitRow = findPreference(getString(R.string.settings_limit_row_key));
             bindPreferenceSummaryToValue(limitRow);
+            */
 
             final Preference startTimeLimit = findPreference(getString(R.string.settings_start_time_limit_key));
             bindPreferenceSummaryToValue(startTimeLimit);
@@ -50,24 +52,27 @@ public class SettingsActivity extends AppCompatActivity {
          * callback to notify change to settings
          *
          * @param preference preference to update
-         * @param newValue   new value
+         * @param newValueObj   new value
          * @return to prevent a proposed preference change by returning false
          */
         @Override
-        public boolean onPreferenceChange(@NonNull final Preference preference, @NonNull final Object newValue) {
-            final String stringValue = newValue.toString();
-            if (preference instanceof ListPreference) {
-                final ListPreference listPreference = (ListPreference) preference;
-                final int prefIndex = listPreference.findIndexOfValue(stringValue);
-                if (prefIndex >= 0) {
-                    final CharSequence[] labels = listPreference.getEntries();
-                    preference.setSummary(labels[prefIndex]);
+        public boolean onPreferenceChange(@NonNull final Preference preference, @NonNull final Object newValueObj) {
+            final String newValue = newValueObj.toString();
+            final String oldValue = preference.getSummary() != null ?  preference.getSummary().toString() : "";
+            if (!oldValue.equals(newValue)) {
+                if (preference instanceof ListPreference) {
+                    final ListPreference listPreference = (ListPreference) preference;
+                    final int prefIndex = listPreference.findIndexOfValue(newValue);
+                    if (prefIndex >= 0) {
+                        final CharSequence[] labels = listPreference.getEntries();
+                        preference.setSummary(labels[prefIndex]);
+                    }
+                } else {
+                    preference.setSummary(newValue);
                 }
-            } else {
-                preference.setSummary(stringValue);
-            }
-            if (!findPreference(getString(R.string.settings_order_by_key)).equals(preference)){
-                Configurations.SETTINGS_CHANGED = true;
+                if (!findPreference(getString(R.string.settings_order_by_key)).equals(preference)) {
+                    Configurations.SETTINGS_CHANGED = true;
+                }
             }
             return true;
         }

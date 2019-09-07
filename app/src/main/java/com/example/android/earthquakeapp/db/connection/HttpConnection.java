@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.example.android.earthquakeapp.Configurations;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,7 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-public class HttpConnection {
+public class HttpConnection implements Closeable {
     /**
      * create http connection handler
      *
@@ -37,7 +38,6 @@ public class HttpConnection {
         Log.d(TAG, "start of method makeHttpGetRequest");
         String jsonResponse;
 
-        HttpURLConnection urlConnection = null;
         try {
             Log.d(TAG, "Open connection with " + this.mUrl);
             urlConnection = (HttpURLConnection) this.mUrl.openConnection();
@@ -56,13 +56,17 @@ public class HttpConnection {
         } catch (IOException e) {
             throw new HttpException(e);
         } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
+            close();
         }
         Log.d(TAG, "end of method makeHttpGetRequest");
-        Configurations.IS_LOADED = true;
         return jsonResponse;
+    }
+
+    public void close() {
+        if (urlConnection != null) {
+            urlConnection.disconnect();
+            urlConnection = null;
+        }
     }
 
     public class HttpException extends Exception {
@@ -118,7 +122,7 @@ public class HttpConnection {
     }
 
     private final URL mUrl;
-
+    private HttpURLConnection urlConnection = null;
     private static final int TIMEOUT = 2 * 60 * 1000;
 
     private static final String TAG = HttpConnection.class.getSimpleName();

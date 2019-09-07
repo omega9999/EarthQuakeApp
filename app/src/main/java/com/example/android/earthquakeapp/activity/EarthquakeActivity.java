@@ -10,11 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.android.earthquakeapp.Configurations;
@@ -22,10 +19,9 @@ import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.db.loader.EarthquakeAdapter;
-import com.example.android.earthquakeapp.db.room.EarthquakeViewModel;
-import com.example.android.earthquakeapp.db.loader.EarthquakeDataDbLoader;
+import com.example.android.earthquakeapp.db.loader.worker.EarthquakeDataDbLoader;
 
-import java.util.List;
+import java.util.Date;
 
 /*
 TODO Programmable Web API Directory: http://www.programmableweb.com/apis/directory
@@ -48,12 +44,14 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
 
         final EmptyRecyclerView earthquakeListView = findViewById(R.id.list);
         this.mEmptyList = findViewById(R.id.empty_view);
-        this.mProgressBar = findViewById(R.id.loading_indicator);
+        this.mProgressBarIndeterminate = findViewById(R.id.loading_indicator_indeterminate);
+
+        this.earthquakeDataDbLoader = new EarthquakeDataDbLoader(this);
 
         if (checkConnection()) {
             if (Configurations.SETTINGS_CHANGED) {
                 Configurations.SETTINGS_CHANGED = false;
-                EarthquakeDataDbLoader.getInstance().loadData(this.getApplication(), this);
+                this.earthquakeDataDbLoader.loadData(this.getApplication());
             }
         }
 
@@ -99,8 +97,9 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
      * @return
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        this.mMenu = menu;
         return true;
     }
 
@@ -125,39 +124,70 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
                 return true;
             case R.id.action_reload:
                 if (checkConnection()) {
-                    EarthquakeDataDbLoader.getInstance().loadData(this.getApplication(), this);
+                    this.earthquakeDataDbLoader.loadData(this.getApplication());
                 }
+                return true;
+            case R.id.action_stop_reload:
+                this.earthquakeDataDbLoader.cancelLoadData(this.getApplication());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-
     @Override
-    public void notifyNewData(final int earthquakeAdded, int numJobCompleted, int numJobTotal) {
+    public void startLoading() {
+        startLoadingTime = new Date().getTime();
         runOnUiThread(() -> {
+            Log.d(TAG, "start loading");
+            mProgressBarIndeterminate.setVisibility(View.VISIBLE);
+            switchActionReload(false);
             invalidateOptionsMenu();
-            final String str = getString(R.string.number_of_earthquakes_added, earthquakeAdded, numJobCompleted, numJobTotal);
-            Log.w(TAG, str);
-            runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
         });
     }
 
     @Override
+    public void notifyNewData(final int earthquakeAdded, int numJobTotal) {
+        runOnUiThread(() -> {
+            if (mProgressBarIndeterminate.getVisibility() == View.VISIBLE) {
+                mProgressBarIndeterminate.setVisibility(View.GONE);
+                Log.d(TAG, "Time for first data loading (ms) = " + (new Date().getTime() - startLoadingTime));
+            }
+            Configurations.NUMBER_TASK_COMPLETED += 1;
+            invalidateOptionsMenu();
+            final String str = getString(R.string.number_of_earthquakes_added, earthquakeAdded, Configurations.NUMBER_TASK_COMPLETED, numJobTotal);
+            Log.w(TAG, str);
+            runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
+
+        });
+    }
+
+
+    @Override
     public void notifyEarthquakeFinalCount(int numEarthquake) {
         invalidateOptionsMenu();
+        if (mProgressBarIndeterminate.getVisibility() == View.VISIBLE) {
+            mProgressBarIndeterminate.setVisibility(View.GONE);
+        }
+        switchActionReload(true);
+
         final String str = getString(R.string.number_of_earthquakes, numEarthquake);
         Log.w(TAG, str);
         runOnUiThread(() -> Toast.makeText(this, str, Toast.LENGTH_SHORT).show());
     }
 
+    private void switchActionReload(final boolean isOn) {
+        this.mMenu.findItem(R.id.action_reload).setVisible(isOn);
+        this.mMenu.findItem(R.id.action_stop_reload).setVisible(!isOn);
+    }
+
 
     private EarthquakeAdapter mAdapter;
+    private EarthquakeDataDbLoader earthquakeDataDbLoader;
     private TextView mEmptyList;
-    private ProgressBar mProgressBar;//TODO gestire progressbar incrementale
-
-
+    private ProgressBar mProgressBarIndeterminate;//TODO gestire progressbar incrementale
+    private long startLoadingTime;
+    private Menu mMenu;
 
     private static final String TAG = EarthquakeActivity.class.getSimpleName();
 

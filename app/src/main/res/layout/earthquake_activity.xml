@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="@+id/container" />
 
     <ProgressBar
-        android:id="@+id/loading_indicator"
+        android:id="@+id/loading_indicator_indeterminate"
         style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

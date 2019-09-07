@@ -3,29 +3,43 @@ package com.example.android.earthquakeapp;
 import android.app.Application;
 import android.util.Log;
 
-import com.example.android.earthquakeapp.activity.UiUtils;
-import com.example.android.earthquakeapp.db.loader.EarthquakeDataDbLoader;
+import androidx.annotation.NonNull;
+import androidx.work.Configuration;
 
-public class EarthquakeApplication extends Application {
+import com.example.android.earthquakeapp.activity.UiUtils;
+
+import java.util.concurrent.Executors;
+
+public class EarthquakeApplication extends Application implements  Configuration.Provider {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mEarthquakeDataDbLoader = EarthquakeDataDbLoader.getInstance();
-        if (UiUtils.isConnected(this)){
-            //Configurations.SETTINGS_CHANGED = false;
-            //mEarthquakeDataDbLoader.loadData(this, null);
-        }
+        Log.d(TAG,"onCreate()");
+
+        //ActivityManager app died, no saved state
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        Log.d(TAG,"finalize()");
+        super.finalize();
     }
 
     @Override
     public void onTerminate() {
-        Log.d(TAG,mEarthquakeDataDbLoader.status());
-        mEarthquakeDataDbLoader.close();
+        Log.d(TAG,"onTerminate()");
         super.onTerminate();
     }
 
-    private EarthquakeDataDbLoader mEarthquakeDataDbLoader;
-
     private static final String TAG = EarthquakeApplication.class.getSimpleName();
+
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder()
+                //.setExecutor(Executors.newFixedThreadPool(10))
+                .setMinimumLoggingLevel(Log.VERBOSE)
+                .build();
+    }
 }

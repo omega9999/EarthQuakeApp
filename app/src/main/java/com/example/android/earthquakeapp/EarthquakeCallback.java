@@ -1,6 +1,9 @@
 package com.example.android.earthquakeapp;
 
-public interface EarthquakeCallback {
+import androidx.lifecycle.LifecycleOwner;
+
+public interface EarthquakeCallback extends LifecycleOwner {
     void notifyEarthquakeFinalCount(final int numEarthquake);
-    void notifyNewData(final int numEarthquakeAdded, int numJobCompleted, int numJobTotal);
+    void notifyNewData(final int numEarthquakeAdded, int numJobTotal);
+    void startLoading();
 }

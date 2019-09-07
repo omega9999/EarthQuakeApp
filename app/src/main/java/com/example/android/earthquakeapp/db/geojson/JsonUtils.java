@@ -1,7 +1,6 @@
 package com.example.android.earthquakeapp.db.geojson;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,10 +8,6 @@ import androidx.annotation.NonNull;
 import com.example.android.earthquakeapp.bean.Earthquake;
 import com.example.android.earthquakeapp.R;
 import com.example.android.earthquakeapp.bean.EarthquakeList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;

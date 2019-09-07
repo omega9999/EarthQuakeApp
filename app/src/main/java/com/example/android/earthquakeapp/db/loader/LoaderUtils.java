@@ -23,7 +23,7 @@ public class LoaderUtils {
 
     @Nullable
     @CheckResult
-    static String[] getQueryUrl(@NonNull final Context context) {
+    public static String[] getQueryUrl(@NonNull final Context context) {
         final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault());
         DATE_FORMAT.setTimeZone(TimeZone.getDefault()); // getTimeZone("GMT"));
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
