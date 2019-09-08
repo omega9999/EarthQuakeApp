@@ -1,7 +1,9 @@
 package com.example.android.earthquakeapp.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -32,6 +34,14 @@ public class WebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         mWebView = findViewById(R.id.web_view);
+
+        toolbar = findViewById(R.id.my_toolbar);
+        toolbar.setTitle(getApplicationInfo().labelRes);
+        setSupportActionBar(toolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
 
         if (null != getIntent()) {
             final Intent intent = getIntent();
@@ -100,6 +110,6 @@ public class WebActivity extends AppCompatActivity {
     }
 
     private WebView mWebView;
-
+    private Toolbar toolbar;
     private static final String TAG = WebActivity.class.getSimpleName();
 }

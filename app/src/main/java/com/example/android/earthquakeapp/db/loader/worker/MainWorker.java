@@ -21,7 +21,6 @@ public class MainWorker extends Worker {
     @NonNull
     @Override
     public ListenableWorker.Result doWork() {
-        Configurations.NUMBER_TASK_COMPLETED = 0;
         final int rows = DbUtils.deleteAllQuake((Application) getApplicationContext());
         Log.d(TAG, "Deleted rows " + rows);
         return Result.success();

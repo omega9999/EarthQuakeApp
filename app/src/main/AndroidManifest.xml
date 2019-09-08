@@ -21,27 +21,6 @@
         android:name=".EarthquakeApplication"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.WebActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
-        </activity>
-
-        <activity
-            android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
-        </activity>
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/settings_title">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
-        </activity>
-
         <activity android:name=".activity.EarthquakeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +29,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".activity.WebActivity"
+            android:parentActivityName="com.example.android.earthquakeapp.activity.EarthquakeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
+        </activity>
+
+        <activity
+            android:name=".activity.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName="com.example.android.earthquakeapp.activity.EarthquakeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/settings_title"
+            android:parentActivityName="com.example.android.earthquakeapp.activity.EarthquakeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.earthquakeapp.activity.EarthquakeActivity" />
+        </activity>
+
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

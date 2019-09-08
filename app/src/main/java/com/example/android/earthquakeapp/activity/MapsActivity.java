@@ -9,6 +9,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentActivity;
 
@@ -32,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, WriteMark, MoveMap {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, WriteMark, MoveMap {
 
     public static final String EARTHQUAKES = MapsActivity.class.getPackage() + ".EARTHQUAKES";
     public static final Uri FROM_DB = Uri.parse("origin://db");
@@ -43,11 +46,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        toolbar = findViewById(R.id.my_toolbar);
+        toolbar.setTitle(getApplicationInfo().labelRes);
+        setSupportActionBar(toolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+
         Log.d(TAG, "onCreate");
 
+        /*
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> NavUtils.navigateUpFromSameTask(MapsActivity.this));
-
+        */
 
         if (getIntent() != null) {
             final Uri data = getIntent().getData();
@@ -237,6 +249,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String TAG = MapsActivity.class.getSimpleName();
 
-
+    private Toolbar toolbar;
 }
 

@@ -8,7 +8,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.R;
@@ -19,6 +21,14 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+
+        toolbar = findViewById(R.id.my_toolbar);
+        toolbar.setTitle(getApplicationInfo().labelRes);
+        setSupportActionBar(toolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
     }
 
     public static class EarthquakePreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
@@ -91,4 +101,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
+
+    private Toolbar toolbar;
 }

@@ -14,6 +14,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.EarthquakeCallback;
 import com.example.android.earthquakeapp.db.loader.LoaderUtils;
 
@@ -28,14 +29,26 @@ public class EarthquakeDataDbLoader {
         this.mCallback = callback;
     }
 
+    public boolean isLoading() {
+        return isLoading;
+    }
+
     public void cancelLoadData(@NonNull Application context) {
         WorkManager.getInstance(context).cancelAllWorkByTag(TAG_MAIN);
         WorkManager.getInstance(context).cancelAllWorkByTag(TAG_DOWNLOAD);
         WorkManager.getInstance(context).cancelAllWorkByTag(TAG_FINAL);
+        isLoading = false;
+        Configurations.NUMBER_TASK_COMPLETED = 0;
     }
 
     public void loadData(@NonNull Application context) {
         cancelLoadData(context);
+
+        if (mCallback != null){
+            mCallback.startLoading();
+        }
+
+        isLoading = true;
 
         final Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -94,6 +107,7 @@ public class EarthquakeDataDbLoader {
                             int numberOfQuake = data.getInt(NUMBER_QUAKE_INSERTED_FINAL, 0);
 
                             mCallback.notifyEarthquakeFinalCount(numberOfQuake);
+                            isLoading = false;
                         }
                     });
         }
@@ -125,6 +139,7 @@ public class EarthquakeDataDbLoader {
     private final List<UUID> uuidList = new ArrayList<>();
     private UUID uuidFinal;
 
+    private boolean isLoading;
 
     static final String URL = "URL";
     static final String INDEX = "INDEX";
