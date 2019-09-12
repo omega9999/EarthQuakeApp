@@ -48,6 +48,9 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
         setSupportActionBar(toolbar);
 
         //ActionBar actionBar = getSupportActionBar();
+
+
+        // TODO https://stackoverflow.com/questions/5337613/how-to-change-color-in-circular-progress-bar/42665331
         mProgressBarToolbar = findViewById(R.id.toolbarProgressBar);
         messageToolbarView = findViewById(R.id.message_toolbar);
 
@@ -167,11 +170,12 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
     public void notifyNewData(final int earthquakeAdded, int numJobTotal) {
         runOnUiThread(() -> {
             if (mProgressBarIndeterminate.getVisibility() == View.VISIBLE) {
-                mProgressBarIndeterminate.setVisibility(View.GONE);
                 mProgressBarToolbar.setVisibility(View.VISIBLE);
                 mProgressBarToolbar.setMax(numJobTotal);
-                earthquakeListView.setVisibility(View.VISIBLE);
                 messageToolbarView.setVisibility(View.VISIBLE);
+                mProgressBarIndeterminate.setVisibility(View.GONE);
+                earthquakeListView.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
                 Log.d(TAG, "Time for first data loading (ms) = " + (new Date().getTime() - startLoadingTime));
             }
             Configurations.NUMBER_TASK_COMPLETED += 1;
@@ -179,6 +183,7 @@ public class EarthquakeActivity extends AppCompatActivity implements EarthquakeC
             final String str = getString(R.string.number_of_earthquakes_added, earthquakeAdded, Configurations.NUMBER_TASK_COMPLETED, numJobTotal);
             Log.w(TAG, str);
             messageToolbarView.setText(str);
+            invalidateOptionsMenu();
             //Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         });
     }

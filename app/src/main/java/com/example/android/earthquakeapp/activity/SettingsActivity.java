@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.android.earthquakeapp.BuildConfig;
 import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.R;
 
@@ -23,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
 
         toolbar = findViewById(R.id.my_toolbar);
-        toolbar.setTitle(getApplicationInfo().labelRes);
+        toolbar.setTitle(getString(getApplicationInfo().labelRes) + " - " + BuildConfig.VERSION_NAME);
         setSupportActionBar(toolbar);
         // Get a support ActionBar corresponding to this toolbar
         final ActionBar ab = getSupportActionBar();
