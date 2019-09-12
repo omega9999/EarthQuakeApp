@@ -66,6 +66,7 @@ task incrementVersionMinor{
 
             code = code + 1
             minor = minor + 1
+            patch = 0
             versionProps['VERSION_CODE'] = code.toString()
             versionProps['VERSION_MAJOR'] = major.toString()
             versionProps['VERSION_MINOR'] = minor.toString()
@@ -91,6 +92,8 @@ task incrementVersionMajor{
 
             code = code + 1
             major = major + 1
+            minor = 0
+            patch = 0
             versionProps['VERSION_CODE'] = code.toString()
             versionProps['VERSION_MAJOR'] = major.toString()
             versionProps['VERSION_MINOR'] = minor.toString()
