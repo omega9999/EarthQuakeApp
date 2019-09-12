@@ -1,14 +1,27 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.example.android.earthquakeapp"
         // TODO for check deprecation temporally minSdkVersion = 28
+
+        def code = 1
+        def name = "1.0"
+        def versionPropsFile = file('version.properties')
+        if (versionPropsFile.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionPropsFile))
+            code = versionProps['VERSION_CODE'].toInteger()
+            name = versionProps['VERSION_NAME']
+        }
+
+        compileSdkVersion 28
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+
+        versionCode code
+        versionName name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
