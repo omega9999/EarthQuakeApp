@@ -111,7 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng centerCoords = new LatLng(0, 0);
         moveMap(centerCoords, zoom);
 
-        if (loadFromDb){
+        if (loadFromDb) {
             HandlerThread thread = new HandlerThread(TAG + ".Thread");
             thread.start();
             Handler handler = new Handler(thread.getLooper());
@@ -122,7 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 double lonMax = 0;
                 final List<Earthquake> cursor = DbUtils.getEarthquakeSync(this.getApplication());
                 int index = 0;
-                for (final Earthquake earthquake:cursor){
+                for (final Earthquake earthquake : cursor) {
                     if (index == 0) {
                         latMin = earthquake.getLatitude();
                         lonMin = earthquake.getLongitude();
@@ -154,9 +154,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 moveMap(new LatLng((latMax + latMin) / 2, (lonMax + lonMin) / 2), zoomDb);
                 thread.quit();
-            },1000);
-        }
-        else{
+            }, 1000);
+        } else {
             double latMin;
             double lonMin;
             double latMax;
@@ -200,19 +199,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void writeEarthquake(@NonNull Earthquake earthquake) {
+
+        final MarkerOptions options = new MarkerOptions();
+        options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
+
+        final String key = getKeyMarker(earthquake);
+        if (!mMapMarker.containsKey(key)) {
+            Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
+            final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+            mMapMarker.put(key, icon);
+        }
+
+        options.icon(mMapMarker.get(key));
+        options.title(getTitle(earthquake));
         runOnUiThread(() -> {
-            final MarkerOptions options = new MarkerOptions();
-            options.position(new LatLng(earthquake.getLatitude(), earthquake.getLongitude()));
-
-            final String key = getKeyMarker(earthquake);
-            if (!mMapMarker.containsKey(key)) {
-                Bitmap bitmap = UiUtils.drawableToBitmap(new MagnitudeDrawable(this, earthquake));
-                final BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
-                mMapMarker.put(key, icon);
-            }
-
-            options.icon(mMapMarker.get(key));
-            options.title(getTitle(earthquake));
             mGoogleMap.addMarker(options);
         });
     }
