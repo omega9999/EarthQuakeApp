@@ -26,82 +26,63 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task incrementVersionPatch{
+class IncrementVersion extends DefaultTask {
+    private File versionPropsFile = new File("version.properties")
+    private Properties versionProps = new Properties()
+    int major
+    int minor
+    int patch
+    int code
+
+    IncrementVersion(){
+        if (versionPropsFile.canRead()) {
+            versionProps.load(new FileInputStream(versionPropsFile))
+            major = versionProps['VERSION_MAJOR'].toInteger()
+            minor = versionProps['VERSION_MINOR'].toInteger()
+            patch = versionProps['VERSION_PATCH'].toInteger()
+            code = versionProps['VERSION_CODE'].toInteger()
+        }
+        else{
+            throw new GradleException("Can't read file version.properties")
+        }
+    }
+
+
+    @TaskAction
+    void doAction() {
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps['VERSION_MAJOR'] = major.toString()
+        versionProps['VERSION_MINOR'] = minor.toString()
+        versionProps['VERSION_PATCH'] = patch.toString()
+        versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+}
+
+task incrementVersionPatch (type: IncrementVersion){
     description "Increase version patch"
     group "build"
-    doLast {
-        def versionPropsFile = file('version.properties')
-        if (versionPropsFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionPropsFile))
-            def major = versionProps['VERSION_MAJOR'].toInteger()
-            def minor = versionProps['VERSION_MINOR'].toInteger()
-            def patch = versionProps['VERSION_PATCH'].toInteger()
-            def code = versionProps['VERSION_CODE'].toInteger()
-
-            code = code + 1
-            patch = patch + 1
-            versionProps['VERSION_CODE'] = code.toString()
-            versionProps['VERSION_MAJOR'] = major.toString()
-            versionProps['VERSION_MINOR'] = minor.toString()
-            versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
-            versionProps.store(versionPropsFile.newWriter(), null)
-        }
-    }
+    code++
+    patch++
 }
 
-task incrementVersionMinor{
+task incrementVersionMinor (type: IncrementVersion){
     description "Increase version minor"
     group "build"
-    doLast {
-        def versionPropsFile = file('version.properties')
-        if (versionPropsFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionPropsFile))
-            def major = versionProps['VERSION_MAJOR'].toInteger()
-            def minor = versionProps['VERSION_MINOR'].toInteger()
-            def patch = versionProps['VERSION_PATCH'].toInteger()
-            def code = versionProps['VERSION_CODE'].toInteger()
 
-            code = code + 1
-            minor = minor + 1
-            patch = 0
-            versionProps['VERSION_CODE'] = code.toString()
-            versionProps['VERSION_MAJOR'] = major.toString()
-            versionProps['VERSION_MINOR'] = minor.toString()
-            versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
-            versionProps.store(versionPropsFile.newWriter(), null)
-        }
-    }
+    code++
+    minor++
+    patch = 0
 }
 
-task incrementVersionMajor{
+task incrementVersionMajor (type: IncrementVersion){
     description "Increase version major"
     group "build"
-    doLast {
-        def versionPropsFile = file('version.properties')
-        if (versionPropsFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionPropsFile))
-            def major = versionProps['VERSION_MAJOR'].toInteger()
-            def minor = versionProps['VERSION_MINOR'].toInteger()
-            def patch = versionProps['VERSION_PATCH'].toInteger()
-            def code = versionProps['VERSION_CODE'].toInteger()
 
-            code = code + 1
-            major = major + 1
-            minor = 0
-            patch = 0
-            versionProps['VERSION_CODE'] = code.toString()
-            versionProps['VERSION_MAJOR'] = major.toString()
-            versionProps['VERSION_MINOR'] = minor.toString()
-            versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
-            versionProps.store(versionPropsFile.newWriter(), null)
-        }
-    }
+    code++
+    major++
+    minor = 0
+    patch = 0
 }
 
 static def getDate() {
