@@ -6,14 +6,17 @@ android {
         applicationId "com.example.android.earthquakeapp"
         // TODO for check deprecation temporally minSdkVersion = 28
 
-        def code = 1
-        def name = "1.0"
-        def versionPropsFile = file('version.properties')
+        def code
+        def name
+        def versionPropsFile = file('../version.properties')
         if (versionPropsFile.canRead()) {
             Properties versionProps = new Properties()
             versionProps.load(new FileInputStream(versionPropsFile))
             code = versionProps['VERSION_CODE'].toInteger()
             name = versionProps['VERSION_NAME']
+        }
+        else{
+            throw new GradleException("Can't read file version.properties")
         }
 
         compileSdkVersion 28
@@ -21,7 +24,7 @@ android {
         targetSdkVersion 28
 
         versionCode code
-        versionName name
+        versionName "$name (build ${getDate()})"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

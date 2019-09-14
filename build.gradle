@@ -45,7 +45,7 @@ task incrementVersionPatch{
             versionProps['VERSION_MAJOR'] = major.toString()
             versionProps['VERSION_MINOR'] = minor.toString()
             versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()} (build ${getDate()})".toString()
+            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
             versionProps.store(versionPropsFile.newWriter(), null)
         }
     }
@@ -71,7 +71,7 @@ task incrementVersionMinor{
             versionProps['VERSION_MAJOR'] = major.toString()
             versionProps['VERSION_MINOR'] = minor.toString()
             versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()} (build ${getDate()})".toString()
+            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
             versionProps.store(versionPropsFile.newWriter(), null)
         }
     }
@@ -98,7 +98,7 @@ task incrementVersionMajor{
             versionProps['VERSION_MAJOR'] = major.toString()
             versionProps['VERSION_MINOR'] = minor.toString()
             versionProps['VERSION_PATCH'] = patch.toString()
-            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()} (build ${getDate()})".toString()
+            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
             versionProps.store(versionPropsFile.newWriter(), null)
         }
     }
