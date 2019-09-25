@@ -18,6 +18,10 @@ public class EarthquakeApplication extends Application implements  Configuration
         Log.d(TAG,"onCreate()");
 
         //ActivityManager app died, no saved state
+
+        //TODO lifecycle app
+        //TODO https://developer.android.com/topic/libraries/architecture/lifecycle#java
+        //TODO https://developer.android.com/reference/androidx/lifecycle/ProcessLifecycleOwner.html
     }
 
     @Override
