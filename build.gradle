@@ -4,11 +4,13 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
-        
+
+        // apt plugin https://bitbucket.org/hvisser/android-apt/src/default/
+        //classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -26,65 +28,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-class IncrementVersion extends DefaultTask {
-    private File versionPropsFile = new File("version.properties")
-    private Properties versionProps = new Properties()
-    int major
-    int minor
-    int patch
-    int code
-
-    IncrementVersion(){
-        if (versionPropsFile.canRead()) {
-            versionProps.load(new FileInputStream(versionPropsFile))
-            major = versionProps['VERSION_MAJOR'].toInteger()
-            minor = versionProps['VERSION_MINOR'].toInteger()
-            patch = versionProps['VERSION_PATCH'].toInteger()
-            code = versionProps['VERSION_CODE'].toInteger()
-        }
-        else{
-            throw new GradleException("Can't read file version.properties")
-        }
-    }
-
-
-    @TaskAction
-    void doAction() {
-        versionProps['VERSION_CODE'] = code.toString()
-        versionProps['VERSION_MAJOR'] = major.toString()
-        versionProps['VERSION_MINOR'] = minor.toString()
-        versionProps['VERSION_PATCH'] = patch.toString()
-        versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-    }
-}
-
-task incrementVersionPatch (type: IncrementVersion){
-    description "Increase version patch"
-    group "build"
-    code++
-    patch++
-}
-
-task incrementVersionMinor (type: IncrementVersion){
-    description "Increase version minor"
-    group "build"
-
-    code++
-    minor++
-    patch = 0
-}
-
-task incrementVersionMajor (type: IncrementVersion){
-    description "Increase version major"
-    group "build"
-
-    code++
-    major++
-    minor = 0
-    patch = 0
-}
-
-static def getDate() {
-    return new Date().format('yyyy-MM-dd HH:mm:ss')
-}

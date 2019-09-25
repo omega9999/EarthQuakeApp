@@ -1,0 +1,109 @@
+class MyExtension {
+    static final String versionFile = "/version.properties"
+    String rootDir
+
+    MyExtension(String root) {
+        rootDir = root
+    }
+
+    @SuppressWarnings("unused")
+    static
+    def getDate() {
+        return new Date().format('yyyy-MM-dd HH:mm:ss')
+    }
+
+    @SuppressWarnings("unused")
+    def getCode() {
+        File versionFileRelative = new File(rootDir + versionFile)
+        if (versionFileRelative.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionFileRelative))
+            def code = versionProps['VERSION_CODE'].toInteger()
+            return code
+        } else {
+            throw new GradleException("code: Can't read file version.properties: " + versionFileRelative.getAbsolutePath())
+        }
+    }
+
+    @SuppressWarnings("unused")
+    def getName() {
+        File versionFileRelative = new File(rootDir + versionFile)
+        if (versionFileRelative.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionFileRelative))
+            def name = versionProps['VERSION_NAME']
+            return name
+        } else {
+            throw new GradleException("name: Can't read file version.properties: " + versionFileRelative.getAbsolutePath())
+        }
+    }
+}
+
+
+class VersioningPlugin implements Plugin<Project> {
+    static class IncrementVersion extends DefaultTask {
+        private Properties versionProps = new Properties()
+        private File versionFileRelative = new File(project.rootDir.toString() + MyExtension.versionFile)
+        int major
+        int minor
+        int patch
+        int code
+
+        IncrementVersion() {
+            if (versionFileRelative.canRead()) {
+                versionProps.load(new FileInputStream(versionFileRelative))
+                major = versionProps['VERSION_MAJOR'].toInteger()
+                minor = versionProps['VERSION_MINOR'].toInteger()
+                patch = versionProps['VERSION_PATCH'].toInteger()
+                code = versionProps['VERSION_CODE'].toInteger()
+            } else {
+                throw new GradleException("IncrementVersion: Can't read file version.properties: " + versionFileRelative.getAbsolutePath())
+            }
+        }
+
+
+        @TaskAction
+        void doAction() {
+            versionProps['VERSION_CODE'] = code.toString()
+            versionProps['VERSION_MAJOR'] = major.toString()
+            versionProps['VERSION_MINOR'] = minor.toString()
+            versionProps['VERSION_PATCH'] = patch.toString()
+            versionProps['VERSION_NAME'] = "${major.toString()}.${minor.toString()}.${patch.toString()}".toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
+        }
+    }
+
+
+    void apply(Project project) {
+        project.extensions.create('version', MyExtension.class, project.rootDir.toString())
+
+        project.task('incrementVersionPatch', type: IncrementVersion) {
+            description "Increase version patch"
+            group "build"
+            code++
+            patch++
+        }
+
+        project.task('incrementVersionMinor', type: IncrementVersion) {
+            description "Increase version minor"
+            group "build"
+
+            code++
+            minor++
+            patch = 0
+        }
+
+        project.task('incrementVersionMajor', type: IncrementVersion) {
+            description "Increase version major"
+            group "build"
+
+            code++
+            major++
+            minor = 0
+            patch = 0
+        }
+    }
+}
+
+
+apply plugin: VersioningPlugin
