@@ -51,7 +51,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //automatic log https://github.com/JakeWharton/timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    //implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //butter knife http://jakewharton.github.io/butterknife/
     //apt https://bitbucket.org/hvisser/android-apt/src/default/
@@ -67,6 +67,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.1.0"
     androidTestImplementation "androidx.room:room-testing:2.1.0"
 
+    implementation "androidx.lifecycle:lifecycle-runtime:2.1.0"
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:2.1.0"
 
