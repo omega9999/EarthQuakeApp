@@ -47,7 +47,7 @@ Casi risolti:
 12)  Uri.Builder class: https://developer.android.com/reference/android/net/Uri.Builder.html
 13) estensione di RecyclerView con EmptyRecyclerView per gestire la lista vuota
 14) setOnItemClickListener sull'adapter per gestire il listener mancante sulle righe della RecyclerView
-    
+15) lifecycle app dal create -> stop con androidx + destroy con workaround usando un service
 
 TODO:
 0) https://alexzh.com/2015/06/26/support-multiple-themes-in-android-application/
