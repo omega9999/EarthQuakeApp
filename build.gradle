@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
 
         // apt plugin https://bitbucket.org/hvisser/android-apt/src/default/
         //classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'

@@ -5,8 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.android.earthquakeapp.Configurations;
-
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;

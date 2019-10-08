@@ -162,6 +162,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
             holder.locationOffset.setText(earthquake.getLocationOffset());
             holder.date.setText(UiUtils.DATE_FORMAT.format(earthquake.getDate()));
             holder.time.setText(UiUtils.TIME_FORMAT.format(earthquake.getDate()));
+            holder.number.setText(String.format("%1$s/%2$s",position+1,mEarthquakes.size()));
         }
 
 
@@ -206,6 +207,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
             this.locationOffset = itemView.findViewById(R.id.location_offset);
             this.date = itemView.findViewById(R.id.date);
             this.time = itemView.findViewById(R.id.time);
+            this.number = itemView.findViewById(R.id.number);
             this.web = itemView.findViewById(R.id.web);
             this.mapSearch = itemView.findViewById(R.id.map_search);
 
@@ -216,6 +218,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.Ea
         private final TextView locationOffset;
         private final TextView date;
         private final TextView time;
+        private final TextView number;
         private final View web;
         private final View mapSearch;
         private final View root;

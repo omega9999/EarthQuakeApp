@@ -9,7 +9,6 @@ import androidx.work.ListenableWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.android.earthquakeapp.Configurations;
 import com.example.android.earthquakeapp.db.room.DbUtils;
 
 public class MainWorker extends Worker {

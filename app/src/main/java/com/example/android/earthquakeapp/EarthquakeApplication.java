@@ -1,9 +1,7 @@
 package com.example.android.earthquakeapp;
 
 import android.app.Application;
-import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,10 +10,6 @@ import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.work.Configuration;
-
-import com.example.android.earthquakeapp.activity.UiUtils;
-
-import java.util.concurrent.Executors;
 
 public class EarthquakeApplication extends Application implements LifecycleEventObserver, Configuration.Provider {
 
